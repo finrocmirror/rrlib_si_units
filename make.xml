@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<targets>
+
+  <rrlib name="si_units">
+    <sources>
+      operators/*
+      si_units.h
+      tSIUnit.h
+      tQuantity.h
+    </sources>
+  </rrlib>
+  
+  <testprogram name="program">
+    <sources>
+      test/test_units.cpp
+    </sources>
+  </testprogram>
+
+</targets>
