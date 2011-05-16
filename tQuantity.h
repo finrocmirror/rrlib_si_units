@@ -84,6 +84,8 @@ class tQuantity<tSIUnit<Tlength, Tmass, Ttime, Telectric_current, Ttemperature, 
 //----------------------------------------------------------------------
 public:
 
+  typedef tSIUnit<Tlength, Tmass, Ttime, Telectric_current, Ttemperature, Tluminous_intensity, Tamount_of_substance> tUnit;
+
   tQuantity() : value(0) {};
 
   tQuantity(double value)
@@ -92,7 +94,7 @@ public:
     assert(!isnan(this->value) && !isinf(this->value));
   };
 
-  operator double() const
+  inline double Value() const
   {
     return this->value;
   }
@@ -111,31 +113,31 @@ private:
 template <typename TUnit>
 const tQuantity<TUnit> operator + (tQuantity<TUnit> left, tQuantity<TUnit> right)
 {
-  return tQuantity<TUnit>(static_cast<double>(left) + static_cast<double>(right));
+  return tQuantity<TUnit>(left.Value() + right.Value());
 }
 
 template <typename TUnit>
 const tQuantity<TUnit> operator - (tQuantity<TUnit> left, tQuantity<TUnit> right)
 {
-  return tQuantity<TUnit>(static_cast<double>(left) - static_cast<double>(right));
+  return tQuantity<TUnit>(left.Value() - right.Value());
 }
 
 template <typename TLeftUnit, typename TRightUnit>
 const tQuantity<typename operators::tProduct<TLeftUnit, TRightUnit>::tResult> operator *(tQuantity<TLeftUnit> left, tQuantity<TRightUnit> right)
 {
-  return tQuantity<typename operators::tProduct<TLeftUnit, TRightUnit>::tResult>(static_cast<double>(left) * static_cast<double>(right));
+  return tQuantity<typename operators::tProduct<TLeftUnit, TRightUnit>::tResult>(left.Value() * right.Value());
 }
 
 template <typename TLeftUnit, typename TRightUnit>
 const tQuantity<typename operators::tQuotient<TLeftUnit, TRightUnit>::tResult> operator / (tQuantity<TLeftUnit> left, tQuantity<TRightUnit> right)
 {
-  return tQuantity<typename operators::tQuotient<TLeftUnit, TRightUnit>::tResult>(static_cast<double>(left) / static_cast<double>(right));
+  return tQuantity<typename operators::tQuotient<TLeftUnit, TRightUnit>::tResult>(left.Value() / right.Value());
 }
 
 template <typename TUnit>
 std::ostream &operator << (std::ostream &stream, tQuantity<TUnit> quantity)
 {
-  stream << static_cast<double>(quantity) << " " << TUnit();
+  stream << quantity.Value() << " " << TUnit();
   return stream;
 }
 

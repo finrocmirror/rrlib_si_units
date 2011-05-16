@@ -82,6 +82,7 @@ int main(int argc, char **argv)
 
   std::cout << tFrequency() << std::endl;
 
+  std::cout << tLength(1) / tLength(1) / tLength(1) / tLength(1) / tLength(1) / tLength(1) * tTemperature(1) << std::endl;
 
   std::cout << "OK" << std::endl;
 
