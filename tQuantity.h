@@ -89,7 +89,7 @@ public:
   tQuantity() : value(0) {};
 
   tQuantity(double value)
-      : value(value)
+    : value(value)
   {
     assert(!isnan(this->value) && !isinf(this->value));
   };
