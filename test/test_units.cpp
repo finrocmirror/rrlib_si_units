@@ -70,7 +70,7 @@ int main(int argc, char **argv)
   std::cout << c << std::endl;
 
   tTime d = 2;
-  tVelocity e = 10;
+//  tVelocity e = 10;
 
 //  tTime fail = a + d;
 
