@@ -32,7 +32,7 @@
  */
 //----------------------------------------------------------------------
 #ifndef __rrlib__si_units__include_guard__
-#error Invalid include directive. Try #include "rrlib/si_unitssi_units.h" instead.
+#error Invalid include directive. Try #include "rrlib/si_units/si_units.h" instead.
 #endif
 
 #ifndef __rrlib__si_units__operators__tProduct_h__
