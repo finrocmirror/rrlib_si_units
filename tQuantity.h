@@ -49,6 +49,11 @@
 #include "rrlib/si_units/operators/tProduct.h"
 #include "rrlib/si_units/operators/tQuotient.h"
 
+
+#ifdef _LIB_RRLIB_SERIALIZATION_PRESENT_
+#include "rrlib/serialization/serialization.h"
+#endif
+
 //----------------------------------------------------------------------
 // Debugging
 //----------------------------------------------------------------------
@@ -140,6 +145,28 @@ std::ostream &operator << (std::ostream &stream, tQuantity<TUnit> quantity)
   stream << quantity.Value() << " " << TUnit();
   return stream;
 }
+
+
+#ifdef _LIB_RRLIB_SERIALIZATION_PRESENT_
+
+template <typename TUnit>
+inline rrlib::serialization::tOutputStream& operator << (rrlib::serialization::tOutputStream& stream, const tQuantity<TUnit>& o)
+{
+  stream << o.Value();
+  return stream;
+}
+
+template <typename TUnit>
+inline rrlib::serialization::tInputStream& operator >> (rrlib::serialization::tInputStream& stream, tQuantity<TUnit>& o)
+{
+  double value;
+  stream >> value;
+  o = tQuantity<TUnit>(value);
+  return stream;
+}
+
+#endif
+
 
 //----------------------------------------------------------------------
 // End of namespace declaration
