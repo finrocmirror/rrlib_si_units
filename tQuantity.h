@@ -104,6 +104,18 @@ public:
     return this->value;
   }
 
+  tQuantity &operator += (tQuantity other)
+  {
+    this->value += other.value;
+    return *this;
+  }
+
+  tQuantity &operator -= (tQuantity other)
+  {
+    this->value -= other.value;
+    return *this;
+  }
+
 //----------------------------------------------------------------------
 // Private fields and methods
 //----------------------------------------------------------------------
@@ -118,13 +130,17 @@ private:
 template <typename TUnit>
 const tQuantity<TUnit> operator + (tQuantity<TUnit> left, tQuantity<TUnit> right)
 {
-  return tQuantity<TUnit>(left.Value() + right.Value());
+  tQuantity<TUnit> result(left);
+  result += right;
+  return result;
 }
 
 template <typename TUnit>
 const tQuantity<TUnit> operator - (tQuantity<TUnit> left, tQuantity<TUnit> right)
 {
-  return tQuantity<TUnit>(left.Value() - right.Value());
+  tQuantity<TUnit> result(left);
+  result -= right;
+  return result;
 }
 
 template <typename TLeftUnit, typename TRightUnit>
