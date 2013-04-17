@@ -104,13 +104,13 @@ public:
     return this->value;
   }
 
-  tQuantity &operator += (tQuantity other)
+  tQuantity operator += (tQuantity other)
   {
     this->value += other.value;
     return *this;
   }
 
-  tQuantity &operator -= (tQuantity other)
+  tQuantity operator -= (tQuantity other)
   {
     this->value -= other.value;
     return *this;
@@ -149,10 +149,15 @@ const tQuantity<typename operators::tProduct<TLeftUnit, TRightUnit>::tResult> op
   return tQuantity<typename operators::tProduct<TLeftUnit, TRightUnit>::tResult>(left.Value() * right.Value());
 }
 
-template <typename TLeftUnit>
-const tQuantity<TLeftUnit> operator *(tQuantity<TLeftUnit> left, double right)
+template <typename TUnit>
+const tQuantity<TUnit> operator *(tQuantity<TUnit> quantity, double scalar)
 {
-  return tQuantity<TLeftUnit>(left.Value() * right);
+  return tQuantity<TUnit>(quantity.Value() * scalar);
+}
+template <typename TUnit>
+const tQuantity<TUnit> operator *(double scalar, tQuantity<TUnit> quantity)
+{
+  return quantity * scalar;
 }
 
 template <typename TLeftUnit, typename TRightUnit>

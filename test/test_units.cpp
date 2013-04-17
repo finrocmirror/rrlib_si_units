@@ -84,6 +84,9 @@ int main(int argc, char **argv)
 
   std::cout << tLength(1) / tLength(1) / tLength(1) / tLength(1) / tLength(1) / tLength(1) * tTemperature(1) << std::endl;
 
+  std::cout << speed * 0.5 << std::endl;
+  std::cout << 0.5 * speed << std::endl;
+
   std::cout << "OK" << std::endl;
 
   return EXIT_SUCCESS;
