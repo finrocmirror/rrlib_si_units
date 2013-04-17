@@ -149,6 +149,12 @@ const tQuantity<typename operators::tProduct<TLeftUnit, TRightUnit>::tResult> op
   return tQuantity<typename operators::tProduct<TLeftUnit, TRightUnit>::tResult>(left.Value() * right.Value());
 }
 
+template <typename TLeftUnit>
+const tQuantity<TLeftUnit> operator *(tQuantity<TLeftUnit> left, double right)
+{
+  return tQuantity<TLeftUnit>(left.Value() * right);
+}
+
 template <typename TLeftUnit, typename TRightUnit>
 const tQuantity<typename operators::tQuotient<TLeftUnit, TRightUnit>::tResult> operator / (tQuantity<TLeftUnit> left, tQuantity<TRightUnit> right)
 {
