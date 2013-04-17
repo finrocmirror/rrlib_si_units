@@ -192,6 +192,23 @@ inline rrlib::serialization::tInputStream& operator >> (rrlib::serialization::tI
   return stream;
 }
 
+template <typename TUnit>
+inline rrlib::serialization::tStringOutputStream& operator << (rrlib::serialization::tStringOutputStream& stream, const tQuantity<TUnit>& o)
+{
+  std::stringstream str;
+  str << o;
+  stream << str.str();
+  return stream;
+}
+
+template <typename TUnit>
+inline rrlib::serialization::tStringInputStream& operator >> (rrlib::serialization::tStringInputStream& stream, tQuantity<TUnit>& o)
+{
+  RRLIB_LOG_PRINT(ERROR, "De-Serializing from strings not (yet) supported");
+  throw std::exception();
+  return stream;
+}
+
 #endif
 
 
