@@ -116,6 +116,11 @@ public:
     return *this;
   }
 
+  operator double() const
+  {
+    return this->Value();
+  }
+
 //----------------------------------------------------------------------
 // Private fields and methods
 //----------------------------------------------------------------------
@@ -141,6 +146,17 @@ const tQuantity<TUnit> operator - (tQuantity<TUnit> left, tQuantity<TUnit> right
   tQuantity<TUnit> result(left);
   result -= right;
   return result;
+}
+
+template <typename TUnit>
+const bool operator < (tQuantity<TUnit> left, tQuantity<TUnit> right)
+{
+  return left.Value() < right.Value();
+}
+template <typename TUnit>
+const bool operator > (tQuantity<TUnit> left, tQuantity<TUnit> right)
+{
+  return left.Value() > right.Value();
 }
 
 template <typename TLeftUnit, typename TRightUnit>
