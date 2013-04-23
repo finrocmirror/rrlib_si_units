@@ -69,7 +69,7 @@ namespace si_units
 /*!
  *
  */
-template <int Tlength, int Tmass, int Ttime, int Telectric_current, int Ttemperature, int Tluminous_intensity, int Tamount_of_substance>
+template <int Tlength, int Tmass, int Ttime, int Telectric_current, int Ttemperature, int Tamount_of_substance, int Tluminous_intensity>
 struct tSIUnit
 {
   static const int cLENGTH = Tlength;
@@ -77,8 +77,8 @@ struct tSIUnit
   static const int cTIME = Ttime;
   static const int cELECTRIC_CURRENT = Telectric_current;
   static const int cTEMPERATURE = Ttemperature;
-  static const int cLUMINOUS_INTENSITY = Tluminous_intensity;
   static const int cAMOUNT_OF_SUBSTANCE = Tamount_of_substance;
+  static const int cLUMINOUS_INTENSITY = Tluminous_intensity;
 };
 
 namespace

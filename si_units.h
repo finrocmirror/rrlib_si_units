@@ -63,21 +63,23 @@ namespace si_units
 //----------------------------------------------------------------------
 // Forward declarations / typedefs / enums
 //----------------------------------------------------------------------
+// the seven basic units
 typedef tSIUnit<1, 0, 0, 0, 0, 0, 0> tMeter;
 typedef tSIUnit<0, 1, 0, 0, 0, 0, 0> tKilogram;
 typedef tSIUnit<0, 0, 1, 0, 0, 0, 0> tSecond;
 typedef tSIUnit<0, 0, 0, 1, 0, 0, 0> tAmpere;
 typedef tSIUnit<0, 0, 0, 0, 1, 0, 0> tKelvin;
-typedef tSIUnit<0, 0, 0, 0, 0, 1, 0> tCandela;
-typedef tSIUnit<0, 0, 0, 0, 0, 0, 1> tMole;
+typedef tSIUnit<0, 0, 0, 0, 0, 1, 0> tMole;
+typedef tSIUnit<0, 0, 0, 0, 0, 0, 1> tCandela;
 
+// the seven basic quantities
 typedef tQuantity<tMeter> tLength;
 typedef tQuantity<tKilogram> tMass;
 typedef tQuantity<tSecond> tTime;
 typedef tQuantity<tAmpere> tElectricCurrent;
 typedef tQuantity<tKelvin> tTemperature;
-typedef tQuantity<tCandela> tLuminousIntensity;
 typedef tQuantity<tMole> tAmountOfSubstance;
+typedef tQuantity<tCandela> tLuminousIntensity;
 
 // some derived units
 typedef tSIUnit < 0, 0, -1, 0, 0, 0, 0 > tHertz;

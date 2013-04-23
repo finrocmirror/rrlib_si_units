@@ -74,16 +74,16 @@ class tProduct;
  *
  */
 template <
-int Tleft_length, int Tleft_mass, int Tleft_time, int Tleft_electric_current, int Tleft_temperature, int Tleft_luminous_intensity, int Tleft_amount_of_substance,
-    int Tright_length, int Tright_mass, int Tright_time, int Tright_electric_current, int Tright_temperature, int Tright_luminous_intensity, int Tright_amount_of_substance
+int Tleft_length, int Tleft_mass, int Tleft_time, int Tleft_electric_current, int Tleft_temperature, int Tleft_amount_of_substance, int Tleft_luminous_intensity,
+    int Tright_length, int Tright_mass, int Tright_time, int Tright_electric_current, int Tright_temperature, int Tright_amount_of_substance, int Tright_luminous_intensity
     >
 struct tProduct <
-    tSIUnit<Tleft_length, Tleft_mass, Tleft_time, Tleft_electric_current, Tleft_temperature, Tleft_luminous_intensity, Tleft_amount_of_substance>,
-    tSIUnit<Tright_length, Tright_mass, Tright_time, Tright_electric_current, Tright_temperature, Tright_luminous_intensity, Tright_amount_of_substance>
+    tSIUnit<Tleft_length, Tleft_mass, Tleft_time, Tleft_electric_current, Tleft_temperature, Tleft_amount_of_substance, Tleft_luminous_intensity>,
+    tSIUnit<Tright_length, Tright_mass, Tright_time, Tright_electric_current, Tright_temperature, Tright_amount_of_substance, Tright_luminous_intensity>
     >
 {
-  typedef tSIUnit<Tleft_length, Tleft_mass, Tleft_time, Tleft_electric_current, Tleft_temperature, Tleft_luminous_intensity, Tleft_amount_of_substance> tLeftUnit;
-  typedef tSIUnit<Tright_length, Tright_mass, Tright_time, Tright_electric_current, Tright_temperature, Tright_luminous_intensity, Tright_amount_of_substance> tRightUnit;
+  typedef tSIUnit<Tleft_length, Tleft_mass, Tleft_time, Tleft_electric_current, Tleft_temperature, Tleft_amount_of_substance, Tleft_luminous_intensity> tLeftUnit;
+  typedef tSIUnit<Tright_length, Tright_mass, Tright_time, Tright_electric_current, Tright_temperature, Tright_amount_of_substance, Tright_luminous_intensity> tRightUnit;
 
 public:
 
@@ -93,8 +93,8 @@ public:
             tLeftUnit::cTIME + tRightUnit::cTIME,
             tLeftUnit::cELECTRIC_CURRENT + tRightUnit::cELECTRIC_CURRENT,
             tLeftUnit::cTEMPERATURE + tRightUnit::cTEMPERATURE,
-            tLeftUnit::cLUMINOUS_INTENSITY + tRightUnit::cLUMINOUS_INTENSITY,
-            tLeftUnit::cAMOUNT_OF_SUBSTANCE + tRightUnit::cAMOUNT_OF_SUBSTANCE
+            tLeftUnit::cAMOUNT_OF_SUBSTANCE + tRightUnit::cAMOUNT_OF_SUBSTANCE,
+            tLeftUnit::cLUMINOUS_INTENSITY + tRightUnit::cLUMINOUS_INTENSITY
             > tResult;
 };
 

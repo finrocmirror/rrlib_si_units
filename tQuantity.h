@@ -80,8 +80,8 @@ struct tQuantity;
 /*!
  *
  */
-template <int Tlength, int Tmass, int Ttime, int Telectric_current, int Ttemperature, int Tluminous_intensity, int Tamount_of_substance>
-class tQuantity<tSIUnit<Tlength, Tmass, Ttime, Telectric_current, Ttemperature, Tluminous_intensity, Tamount_of_substance>>
+template <int Tlength, int Tmass, int Ttime, int Telectric_current, int Ttemperature, int Tamount_of_substance, int Tluminous_intensity>
+class tQuantity<tSIUnit<Tlength, Tmass, Ttime, Telectric_current, Ttemperature, Tamount_of_substance, Tluminous_intensity>>
 {
 
 //----------------------------------------------------------------------
@@ -89,7 +89,7 @@ class tQuantity<tSIUnit<Tlength, Tmass, Ttime, Telectric_current, Ttemperature, 
 //----------------------------------------------------------------------
 public:
 
-  typedef tSIUnit<Tlength, Tmass, Ttime, Telectric_current, Ttemperature, Tluminous_intensity, Tamount_of_substance> tUnit;
+  typedef tSIUnit<Tlength, Tmass, Ttime, Telectric_current, Ttemperature, Tamount_of_substance, Tluminous_intensity> tUnit;
 
   tQuantity() : value(0) {};
 
