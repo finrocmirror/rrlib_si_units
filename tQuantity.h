@@ -116,11 +116,6 @@ public:
     return *this;
   }
 
-  operator double() const
-  {
-    return this->Value();
-  }
-
 //----------------------------------------------------------------------
 // Private fields and methods
 //----------------------------------------------------------------------
@@ -131,7 +126,9 @@ private:
 };
 
 
-
+//----------------------------------------------------------------------
+// Addition
+//----------------------------------------------------------------------
 template <typename TUnit>
 const tQuantity<TUnit> operator + (tQuantity<TUnit> left, tQuantity<TUnit> right)
 {
@@ -140,6 +137,9 @@ const tQuantity<TUnit> operator + (tQuantity<TUnit> left, tQuantity<TUnit> right
   return result;
 }
 
+//----------------------------------------------------------------------
+// Subtraction
+//----------------------------------------------------------------------
 template <typename TUnit>
 const tQuantity<TUnit> operator - (tQuantity<TUnit> left, tQuantity<TUnit> right)
 {
@@ -148,17 +148,9 @@ const tQuantity<TUnit> operator - (tQuantity<TUnit> left, tQuantity<TUnit> right
   return result;
 }
 
-template <typename TUnit>
-const bool operator < (tQuantity<TUnit> left, tQuantity<TUnit> right)
-{
-  return left.Value() < right.Value();
-}
-template <typename TUnit>
-const bool operator > (tQuantity<TUnit> left, tQuantity<TUnit> right)
-{
-  return left.Value() > right.Value();
-}
-
+//----------------------------------------------------------------------
+// Multiplication
+//----------------------------------------------------------------------
 template <typename TLeftUnit, typename TRightUnit>
 const tQuantity<typename operators::tProduct<TLeftUnit, TRightUnit>::tResult> operator *(tQuantity<TLeftUnit> left, tQuantity<TRightUnit> right)
 {
@@ -176,6 +168,9 @@ const tQuantity<TUnit> operator *(double scalar, tQuantity<TUnit> quantity)
   return quantity * scalar;
 }
 
+//----------------------------------------------------------------------
+// Division
+//----------------------------------------------------------------------
 template <typename TLeftUnit, typename TRightUnit>
 const tQuantity<typename operators::tQuotient<TLeftUnit, TRightUnit>::tResult> operator / (tQuantity<TLeftUnit> left, tQuantity<TRightUnit> right)
 {
@@ -193,6 +188,20 @@ const tQuantity<typename operators::tQuotient<tSIUnit<0, 0, 0, 0, 0, 0, 0>, TUni
   return tQuantity<tSIUnit<0, 0, 0, 0, 0, 0, 0>>(scalar) / quantity;
 }
 
+template <typename TUnit>
+const bool operator < (tQuantity<TUnit> left, tQuantity<TUnit> right)
+{
+  return left.Value() < right.Value();
+}
+template <typename TUnit>
+const bool operator > (tQuantity<TUnit> left, tQuantity<TUnit> right)
+{
+  return left.Value() > right.Value();
+}
+
+//----------------------------------------------------------------------
+// Streaming
+//----------------------------------------------------------------------
 template <typename TUnit>
 std::ostream &operator << (std::ostream &stream, tQuantity<TUnit> quantity)
 {
@@ -220,16 +229,16 @@ inline serialization::tInputStream& operator >> (serialization::tInputStream &st
 }
 
 template <typename TUnit>
-inline rrlib::serialization::tStringOutputStream& operator << (rrlib::serialization::tStringOutputStream& stream, const tQuantity<TUnit>& o)
+inline serialization::tStringOutputStream &operator << (serialization::tStringOutputStream &stream, tQuantity<TUnit> quantity)
 {
   std::stringstream str;
-  str << o;
+  str << quantity;
   stream << str.str();
   return stream;
 }
 
 template <typename TUnit>
-inline rrlib::serialization::tStringInputStream& operator >> (rrlib::serialization::tStringInputStream& stream, tQuantity<TUnit>& o)
+inline serialization::tStringInputStream &operator >> (serialization::tStringInputStream &stream, tQuantity<TUnit> &quantity)
 {
   RRLIB_LOG_PRINT(ERROR, "De-Serializing from strings not (yet) supported");
   throw std::exception();
