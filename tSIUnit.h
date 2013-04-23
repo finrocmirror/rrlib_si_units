@@ -41,6 +41,7 @@
 //----------------------------------------------------------------------
 // External includes (system with <>, local with "")
 //----------------------------------------------------------------------
+#include "rrlib/util/join.h"
 
 //----------------------------------------------------------------------
 // Internal includes with ""
@@ -81,95 +82,27 @@ struct tSIUnit
   static const int cLUMINOUS_INTENSITY = Tluminous_intensity;
 };
 
-namespace
+
+void DetermineSymbolComponentsFromExponentList(std::vector<std::string> &nominator, std::vector<std::string> &denominator, int *exponents, std::ostream &stream);
+
+
+template <int Tlength, int Tmass, int Ttime, int Telectric_current, int Ttemperature, int Tamount_of_substance, int Tluminous_intensity>
+std::ostream &operator << (std::ostream &stream, tSIUnit<Tlength, Tmass, Ttime, Telectric_current, Ttemperature, Tamount_of_substance, Tluminous_intensity> unit)
 {
+  std::vector<std::string> nominator;
+  std::vector<std::string> denominator;
+  int exponents[7] = { Tlength, Tmass, Ttime, Telectric_current, Ttemperature, Tamount_of_substance, Tluminous_intensity };
 
-template <int Tlength, int Tmass, int Ttime, int Telectric_current, int Ttemperature, int Tluminous_intensity, int Tamount_of_substance>
-inline void WriteInterpretedExponentsToStream(std::ostream &stream)
-{
-  if (Tlength > 0)
-  {
-    stream << "m" << (Tlength == 2 ? "²" : Tlength == 3 ? "³" : "");
-    if (Tlength > 3)
-    {
-      stream << "^" << Tlength;
-    }
-  }
-  if (Tmass > 0)
-  {
-    stream << "kg" << (Tmass == 2 ? "²" : Tmass == 3 ? "³" : "");
-    if (Tmass > 3)
-    {
-      stream << "^" << Tmass;
-    }
-  }
-  if (Ttime > 0)
-  {
-    stream << "s" << (Ttime == 2 ? "²" : Ttime == 3 ? "³" : "");
-    if (Ttime > 3)
-    {
-      stream << "^" << Ttime;
-    }
-  }
-  if (Telectric_current > 0)
-  {
-    stream << "A" << (Telectric_current == 2 ? "²" : Telectric_current == 3 ? "³" : "");
-    if (Telectric_current > 3)
-    {
-      stream << "^" << Telectric_current;
-    }
-  }
-  if (Ttemperature > 0)
-  {
-    stream << "K" << (Ttemperature == 2 ? "²" : Ttemperature == 3 ? "³" : "");
-    if (Ttemperature > 3)
-    {
-      stream << "^" << Ttemperature;
-    }
-  }
-  if (Tluminous_intensity > 0)
-  {
-    stream << "cd" << (Tluminous_intensity == 2 ? "²" : Tluminous_intensity == 3 ? "³" : "");
-    if (Tluminous_intensity > 3)
-    {
-      stream << "^" << Tluminous_intensity;
-    }
-  }
-  if (Tamount_of_substance > 0)
-  {
-    stream << "mol" << (Tamount_of_substance == 2 ? "²" : Tamount_of_substance == 3 ? "³" : "");
-    if (Tamount_of_substance > 3)
-    {
-      stream << "^" << Tamount_of_substance;
-    }
-  }
-}
+  DetermineSymbolComponentsFromExponentList(nominator, denominator, exponents, stream);
 
-}
-
-template <typename TUnit>
-inline bool WriteDerivedUnitToStream(std::ostream &stream, TUnit)
-{
-  return false;
-}
-
-template <int Tlength, int Tmass, int Ttime, int Telectric_current, int Ttemperature, int Tluminous_intensity, int Tamount_of_substance>
-std::ostream &operator << (std::ostream &stream, tSIUnit<Tlength, Tmass, Ttime, Telectric_current, Ttemperature, Tluminous_intensity, Tamount_of_substance> unit)
-{
-  if (!WriteDerivedUnitToStream(stream, tSIUnit<Tlength, Tmass, Ttime, Telectric_current, Ttemperature, Tluminous_intensity, Tamount_of_substance>()))
+  if (!nominator.empty())
   {
-    bool nominator = Tlength > 0 || Tmass > 0 || Ttime > 0 || Telectric_current > 0 || Ttemperature > 0 || Tluminous_intensity > 0 || Tamount_of_substance > 0;
-    bool denominator = Tlength < 0 || Tmass < 0 || Ttime < 0 || Telectric_current < 0 || Ttemperature < 0 || Tluminous_intensity < 0 || Tamount_of_substance < 0;
-
-    if (nominator)
-    {
-      WriteInterpretedExponentsToStream<Tlength, Tmass, Ttime, Telectric_current, Ttemperature, Tluminous_intensity, Tamount_of_substance>(stream);
-    }
-    if (denominator)
-    {
-      stream << (!nominator ? "1/" : "/");
-      WriteInterpretedExponentsToStream < -Tlength, -Tmass, -Ttime, -Telectric_current, -Ttemperature, -Tluminous_intensity, -Tamount_of_substance > (stream);
-    }
+    stream << util::Join(nominator, "");
+  }
+  if (!denominator.empty())
+  {
+    stream << (nominator.empty() ? "1/" : "/");
+    stream << util::Join(denominator, "");
   }
 
   return stream;

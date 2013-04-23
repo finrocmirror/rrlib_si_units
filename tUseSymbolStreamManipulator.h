@@ -19,84 +19,87 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //----------------------------------------------------------------------
-/*!\file    test_units.cpp
+/*!\file    rrlib/si_units/tUseSymbolStreamManipulator.h
  *
- * \author  Tobias Foehst
+ * \author  Tobias Föhst
  *
- * \date    2010-03-15
+ * \date    2013-04-22
+ *
+ * \brief   Contains tUseSymbolStreamManipulator
+ *
+ * \b tUseSymbolStreamManipulator
+ *
+ * This class allows a user to define symbols for a specific stream like with <iomanip>
  *
  */
 //----------------------------------------------------------------------
+#ifndef __rrlib__si_units__include_guard__
+#error Invalid include directive. Try #include "rrlib/si_units/si_units.h" instead.
+#endif
+
+#ifndef __rrlib__si_units__tUseSymbolStreamManipulator_h__
+#define __rrlib__si_units__tUseSymbolStreamManipulator_h__
 
 //----------------------------------------------------------------------
 // External includes (system with <>, local with "")
 //----------------------------------------------------------------------
-#include <cstdlib>
-#include <iostream>
 
 //----------------------------------------------------------------------
 // Internal includes with ""
 //----------------------------------------------------------------------
-#include "rrlib/si_units/si_units.h"
+#include "rrlib/si_units/tSymbol.h"
+#include "rrlib/si_units/tUserDefinedSymbolsRegistry.h"
 
 //----------------------------------------------------------------------
-// Debugging
+// Namespace declaration
 //----------------------------------------------------------------------
-#include <cassert>
-
-//----------------------------------------------------------------------
-// Namespace usage
-//----------------------------------------------------------------------
-using namespace rrlib::si_units;
+namespace rrlib
+{
+namespace si_units
+{
 
 //----------------------------------------------------------------------
 // Forward declarations / typedefs / enums
 //----------------------------------------------------------------------
 
 //----------------------------------------------------------------------
-// Const values
+// Class declaration
 //----------------------------------------------------------------------
-
-//----------------------------------------------------------------------
-// Implementation
-//----------------------------------------------------------------------
-
-int main(int argc, char **argv)
+//! SHORT_DESCRIPTION
+/*!
+ * This class allows a user to define symbols for a specific stream like with <iomanip>
+ */
+struct tUseSymbolStreamManipulator
 {
-  tLength a = 20;
-  tLength b = 5;
-  tLength c = a - b;
+  tSymbol symbol;
+  bool only_once;
+};
 
-  std::cout << c << std::endl;
-  std::cout << c * c << std::endl;
 
-  tTime d = 2;
-//  tVelocity e = 10;
+inline std::ostream &operator << (std::ostream &stream, const tUseSymbolStreamManipulator &manipulator)
+{
+  int registry_key = stream.iword(tUserDefinedSymbolsRegistry::KeyIOSIndex());
+  if (registry_key == 0)
+  {
+    registry_key = tUserDefinedSymbols::Instance().GetNextStreamKey();
+    stream.iword(tUserDefinedSymbolsRegistry::KeyIOSIndex()) = registry_key;
+  }
+  tUserDefinedSymbols::Instance().RegisterForStream(registry_key, manipulator.symbol, manipulator.only_once);
 
-//  tTime fail = a + d;
-
-  tVelocity speed = c / d;
-
-  std::cout << speed << std::endl;
-
-//  tTemperature temp = c / d;
-
-  std::cout << tFrequency() << std::endl;
-
-  std::cout << UseSymbol(tHertz(), "Hz", false) << tFrequency() << std::endl;
-
-  std::cout << tLength(1) / tLength(1) / tLength(1) / tLength(1) / tLength(1) / tLength(1) * tTemperature(1) << std::endl;
-
-  std::cout << speed * 0.5 << std::endl;
-  std::cout << 0.5 * speed << std::endl;
-
-  std::cout << "OK" << std::endl;
-
-  std::cout << 1 / (tForce(1) * tLength(1)) << std::endl;
-
-//  tForce force;
-//  std::cin >> force;
-//  std::cout << force << std::endl;
-
-  return EXIT_SUCCESS;
+  return stream;
 }
+
+template <typename TUnit>
+inline tUseSymbolStreamManipulator UseSymbol(const TUnit &unit, const std::string &symbol, bool persistent = true)
+{
+  return { tSymbol(unit, symbol), persistent };
+}
+
+//----------------------------------------------------------------------
+// End of namespace declaration
+//----------------------------------------------------------------------
+}
+}
+
+
+#endif

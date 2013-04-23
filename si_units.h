@@ -45,6 +45,7 @@
 
 #include "rrlib/si_units/tSIUnit.h"
 #include "rrlib/si_units/tQuantity.h"
+#include "rrlib/si_units/tUseSymbolStreamManipulator.h"
 
 #undef __rrlib__si_units__include_guard__
 
@@ -94,23 +95,6 @@ typedef tQuantity<tPascal> tPressure;
 typedef tQuantity < tSIUnit < 1, 0, -1, 0, 0, 0, 0 >> tVelocity;
 typedef tQuantity < tSIUnit < 1, 0, -2, 0, 0, 0, 0 >> tAcceleration;
 
-inline bool WriteDerivedUnitToStream(std::ostream &stream, tHertz)
-{
-  stream << "Hz";
-  return true;
-}
-
-inline bool WriteDerivedUnitToStream(std::ostream &stream, tNewton)
-{
-  stream << "N";
-  return true;
-}
-
-inline bool WriteDerivedUnitToStream(std::ostream &stream, tPascal)
-{
-  stream << "Pa";
-  return true;
-}
 
 //----------------------------------------------------------------------
 // Const values

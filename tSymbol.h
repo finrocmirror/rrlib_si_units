@@ -19,84 +19,115 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //----------------------------------------------------------------------
-/*!\file    test_units.cpp
+/*!\file    rrlib/si_units/tSymbol.h
  *
- * \author  Tobias Foehst
+ * \author  Tobias Föhst
  *
- * \date    2010-03-15
+ * \date    2013-04-18
+ *
+ * \brief   Contains tSymbol
+ *
+ * \b tSymbol
+ *
+ * This class implements the mapping between a (derived) SI unit and its symbol
  *
  */
 //----------------------------------------------------------------------
+#ifndef __rrlib__si_units__include_guard__
+#error Invalid include directive. Try #include "rrlib/si_units/si_units.h" instead.
+#endif
+
+#ifndef __rrlib__si_units__tSymbol_h__
+#define __rrlib__si_units__tSymbol_h__
 
 //----------------------------------------------------------------------
 // External includes (system with <>, local with "")
 //----------------------------------------------------------------------
-#include <cstdlib>
-#include <iostream>
 
 //----------------------------------------------------------------------
 // Internal includes with ""
 //----------------------------------------------------------------------
-#include "rrlib/si_units/si_units.h"
 
 //----------------------------------------------------------------------
-// Debugging
+// Namespace declaration
 //----------------------------------------------------------------------
-#include <cassert>
-
-//----------------------------------------------------------------------
-// Namespace usage
-//----------------------------------------------------------------------
-using namespace rrlib::si_units;
+namespace rrlib
+{
+namespace si_units
+{
 
 //----------------------------------------------------------------------
 // Forward declarations / typedefs / enums
 //----------------------------------------------------------------------
 
 //----------------------------------------------------------------------
-// Const values
+// Class declaration
 //----------------------------------------------------------------------
-
-//----------------------------------------------------------------------
-// Implementation
-//----------------------------------------------------------------------
-
-int main(int argc, char **argv)
+//! SHORT_DESCRIPTION
+/*!
+ * This class implements the mapping between a (derived) SI unit and its symbol
+ */
+class tSymbol
 {
-  tLength a = 20;
-  tLength b = 5;
-  tLength c = a - b;
 
-  std::cout << c << std::endl;
-  std::cout << c * c << std::endl;
+//----------------------------------------------------------------------
+// Public methods and typedefs
+//----------------------------------------------------------------------
+public:
 
-  tTime d = 2;
-//  tVelocity e = 10;
+  std::string cSYMBOL;
+  const int cEXPONENTS[7];
 
-//  tTime fail = a + d;
+  template <typename TUnit>
+  tSymbol(TUnit unit, const std::string &symbol) :
+    cSYMBOL(symbol),
+    cEXPONENTS {TUnit::cLENGTH, TUnit::cMASS, TUnit::cTIME, TUnit::cELECTRIC_CURRENT, TUnit::cTEMPERATURE, TUnit::cAMOUNT_OF_SUBSTANCE, TUnit::cLUMINOUS_INTENSITY}
+  {}
 
-  tVelocity speed = c / d;
+};
 
-  std::cout << speed << std::endl;
-
-//  tTemperature temp = c / d;
-
-  std::cout << tFrequency() << std::endl;
-
-  std::cout << UseSymbol(tHertz(), "Hz", false) << tFrequency() << std::endl;
-
-  std::cout << tLength(1) / tLength(1) / tLength(1) / tLength(1) / tLength(1) / tLength(1) * tTemperature(1) << std::endl;
-
-  std::cout << speed * 0.5 << std::endl;
-  std::cout << 0.5 * speed << std::endl;
-
-  std::cout << "OK" << std::endl;
-
-  std::cout << 1 / (tForce(1) * tLength(1)) << std::endl;
-
-//  tForce force;
-//  std::cin >> force;
-//  std::cout << force << std::endl;
-
-  return EXIT_SUCCESS;
+inline bool operator == (const tSymbol &left, const tSymbol &right)
+{
+  for (size_t i = 0; i < 7; ++i)
+  {
+    if (left.cEXPONENTS[i] != right.cEXPONENTS[i])
+    {
+      return false;
+    }
+  }
+  return left.cSYMBOL == right.cSYMBOL;
 }
+
+inline bool operator < (const tSymbol &left, const tSymbol &right)
+{
+  int left_exponents = 0;
+  int right_exponents = 0;
+  for (size_t i = 0; i < 7; ++i)
+  {
+    left_exponents += abs(left.cEXPONENTS[i]);
+    right_exponents += abs(right.cEXPONENTS[i]);
+  }
+  if (left_exponents != right_exponents)
+  {
+    return left_exponents < right_exponents;
+  }
+
+  for (size_t i = 0; i < 7; ++i)
+  {
+    if (abs(left.cEXPONENTS[i]) != abs(right.cEXPONENTS[i]))
+    {
+      return abs(left.cEXPONENTS[i]) < abs(right.cEXPONENTS[i]);
+    }
+  }
+
+  return false;
+}
+
+//----------------------------------------------------------------------
+// End of namespace declaration
+//----------------------------------------------------------------------
+}
+}
+
+
+#endif

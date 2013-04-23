@@ -6,8 +6,11 @@
     <sources>
       operators/*
       si_units.h
-      tSIUnit.h
       tQuantity.h
+      tSIUnit.cpp
+      tSymbol.h
+      tUserDefinedSymbolsRegistry.h
+      tUseSymbolStreamManipulator.h
     </sources>
   </rrlib>
   
