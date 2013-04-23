@@ -183,6 +183,17 @@ const tQuantity<typename operators::tQuotient<TLeftUnit, TRightUnit>::tResult> o
 }
 
 template <typename TUnit>
+const tQuantity<TUnit> operator /(tQuantity<TUnit> quantity, double scalar)
+{
+  return quantity / tQuantity<tSIUnit<0, 0, 0, 0, 0, 0, 0>>(scalar);
+}
+template <typename TUnit>
+const tQuantity<typename operators::tQuotient<tSIUnit<0, 0, 0, 0, 0, 0, 0>, TUnit>::tResult> operator /(double scalar, tQuantity<TUnit> quantity)
+{
+  return tQuantity<tSIUnit<0, 0, 0, 0, 0, 0, 0>>(scalar) / quantity;
+}
+
+template <typename TUnit>
 std::ostream &operator << (std::ostream &stream, tQuantity<TUnit> quantity)
 {
   stream << quantity.Value() << " " << TUnit();
@@ -193,18 +204,18 @@ std::ostream &operator << (std::ostream &stream, tQuantity<TUnit> quantity)
 #ifdef _LIB_RRLIB_SERIALIZATION_PRESENT_
 
 template <typename TUnit>
-inline rrlib::serialization::tOutputStream& operator << (rrlib::serialization::tOutputStream& stream, const tQuantity<TUnit>& o)
+inline serialization::tOutputStream& operator << (serialization::tOutputStream &stream, tQuantity<TUnit> quantity)
 {
-  stream << o.Value();
+  stream << quantity.Value();
   return stream;
 }
 
 template <typename TUnit>
-inline rrlib::serialization::tInputStream& operator >> (rrlib::serialization::tInputStream& stream, tQuantity<TUnit>& o)
+inline serialization::tInputStream& operator >> (serialization::tInputStream &stream, tQuantity<TUnit> &quantity)
 {
   double value;
   stream >> value;
-  o = tQuantity<TUnit>(value);
+  quantity = tQuantity<TUnit>(value);
   return stream;
 }
 

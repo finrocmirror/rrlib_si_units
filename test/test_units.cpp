@@ -89,5 +89,7 @@ int main(int argc, char **argv)
 
   std::cout << "OK" << std::endl;
 
+  std::cout << 1 / (tForce(1) * tLength(1)) << std::endl;
+
   return EXIT_SUCCESS;
 }
