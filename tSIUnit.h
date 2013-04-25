@@ -62,6 +62,7 @@ namespace si_units
 //----------------------------------------------------------------------
 // Forward declarations / typedefs / enums
 //----------------------------------------------------------------------
+const unsigned int cNUMBER_OF_BASIC_DIMENSIONS = 7;
 
 //----------------------------------------------------------------------
 // Class declaration
@@ -91,7 +92,7 @@ std::ostream &operator << (std::ostream &stream, tSIUnit<Tlength, Tmass, Ttime, 
 {
   std::vector<std::string> nominator;
   std::vector<std::string> denominator;
-  int exponents[7] = { Tlength, Tmass, Ttime, Telectric_current, Ttemperature, Tamount_of_substance, Tluminous_intensity };
+  int exponents[cNUMBER_OF_BASIC_DIMENSIONS] = { Tlength, Tmass, Ttime, Telectric_current, Ttemperature, Tamount_of_substance, Tluminous_intensity };
 
   DetermineSymbolComponentsFromExponentList(nominator, denominator, exponents, stream);
 

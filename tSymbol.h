@@ -76,7 +76,7 @@ class tSymbol
 public:
 
   std::string cSYMBOL;
-  const int cEXPONENTS[7];
+  const int cEXPONENTS[cNUMBER_OF_BASIC_DIMENSIONS];
 
   template <typename TUnit>
   tSymbol(TUnit unit, const std::string &symbol) :
@@ -88,7 +88,7 @@ public:
 
 inline bool operator == (const tSymbol &left, const tSymbol &right)
 {
-  for (size_t i = 0; i < 7; ++i)
+  for (size_t i = 0; i < cNUMBER_OF_BASIC_DIMENSIONS; ++i)
   {
     if (left.cEXPONENTS[i] != right.cEXPONENTS[i])
     {
@@ -102,7 +102,7 @@ inline bool operator < (const tSymbol &left, const tSymbol &right)
 {
   int left_exponents = 0;
   int right_exponents = 0;
-  for (size_t i = 0; i < 7; ++i)
+  for (size_t i = 0; i < cNUMBER_OF_BASIC_DIMENSIONS; ++i)
   {
     left_exponents += abs(left.cEXPONENTS[i]);
     right_exponents += abs(right.cEXPONENTS[i]);
@@ -112,7 +112,7 @@ inline bool operator < (const tSymbol &left, const tSymbol &right)
     return left_exponents < right_exponents;
   }
 
-  for (size_t i = 0; i < 7; ++i)
+  for (size_t i = 0; i < cNUMBER_OF_BASIC_DIMENSIONS; ++i)
   {
     if (abs(left.cEXPONENTS[i]) != abs(right.cEXPONENTS[i]))
     {

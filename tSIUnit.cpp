@@ -63,7 +63,6 @@ namespace si_units
 //----------------------------------------------------------------------
 // Const values
 //----------------------------------------------------------------------
-const unsigned int cNUMBER_OF_BASIC_DIMENSIONS = 7;
 
 const std::set<tSymbol> cBASIC_UNIT_SYMBOLS
 {
@@ -94,7 +93,7 @@ namespace
 //----------------------------------------------------------------------
 bool ExtractSymbolFromExponents(tSymbol symbol, int *exponents)
 {
-  for (size_t i = 0; i < 7; ++i)
+  for (size_t i = 0; i < cNUMBER_OF_BASIC_DIMENSIONS; ++i)
   {
     if (symbol.cEXPONENTS[i] > 0 && exponents[i] < symbol.cEXPONENTS[i])
     {
@@ -106,7 +105,7 @@ bool ExtractSymbolFromExponents(tSymbol symbol, int *exponents)
     }
   }
 
-  for (size_t i = 0; i < 7; ++i)
+  for (size_t i = 0; i < cNUMBER_OF_BASIC_DIMENSIONS; ++i)
   {
     exponents[i] -= symbol.cEXPONENTS[i];
   }
