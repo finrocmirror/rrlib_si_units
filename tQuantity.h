@@ -188,15 +188,43 @@ const tQuantity<typename operators::tQuotient<tSIUnit<0, 0, 0, 0, 0, 0, 0>, TUni
   return tQuantity<tSIUnit<0, 0, 0, 0, 0, 0, 0>>(scalar) / quantity;
 }
 
+//----------------------------------------------------------------------
+// Comparison
+//----------------------------------------------------------------------
+template <typename TUnit>
+const bool operator == (tQuantity<TUnit> left, tQuantity<TUnit> right)
+{
+  return left.Value() == right.Value();
+}
+
+template <typename TUnit>
+const bool operator != (tQuantity<TUnit> left, tQuantity<TUnit> right)
+{
+  return !(left == right);
+}
+
 template <typename TUnit>
 const bool operator < (tQuantity<TUnit> left, tQuantity<TUnit> right)
 {
   return left.Value() < right.Value();
 }
+
 template <typename TUnit>
 const bool operator > (tQuantity<TUnit> left, tQuantity<TUnit> right)
 {
   return left.Value() > right.Value();
+}
+
+template <typename TUnit>
+const bool operator <= (tQuantity<TUnit> left, tQuantity<TUnit> right)
+{
+  return !(left > right);
+}
+
+template <typename TUnit>
+const bool operator >= (tQuantity<TUnit> left, tQuantity<TUnit> right)
+{
+  return !(left < right);
 }
 
 //----------------------------------------------------------------------
@@ -208,7 +236,6 @@ std::ostream &operator << (std::ostream &stream, tQuantity<TUnit> quantity)
   stream << quantity.Value() << " " << TUnit();
   return stream;
 }
-
 
 #ifdef _LIB_RRLIB_SERIALIZATION_PRESENT_
 
