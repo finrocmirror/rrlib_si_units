@@ -43,6 +43,8 @@
 //----------------------------------------------------------------------
 #include <cmath>
 
+#include "rrlib/math/utilities.h"
+
 //----------------------------------------------------------------------
 // Internal includes with ""
 //----------------------------------------------------------------------
@@ -225,6 +227,12 @@ template <typename TUnit>
 const bool operator >= (tQuantity<TUnit> left, tQuantity<TUnit> right)
 {
   return !(left < right);
+}
+
+template <typename TUnit>
+const bool IsEqual(tQuantity<TUnit> a, tQuantity<TUnit> b, float max_error = 1.0E-6, math::tFloatComparisonMethod method = math::eFCM_ABSOLUTE_ERROR)
+{
+  return IsEqual(a.Value(), b.Value(), max_error, method);
 }
 
 //----------------------------------------------------------------------
