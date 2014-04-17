@@ -118,6 +118,11 @@ public:
     return *this;
   }
 
+  explicit inline operator double() const
+  {
+    return this->value;
+  }
+
 //----------------------------------------------------------------------
 // Private fields and methods
 //----------------------------------------------------------------------
