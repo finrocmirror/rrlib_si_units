@@ -137,7 +137,7 @@ private:
 // Addition
 //----------------------------------------------------------------------
 template <typename TUnit>
-const tQuantity<TUnit> operator + (tQuantity<TUnit> left, tQuantity<TUnit> right)
+tQuantity<TUnit> operator + (tQuantity<TUnit> left, tQuantity<TUnit> right)
 {
   tQuantity<TUnit> result(left);
   result += right;
@@ -148,7 +148,7 @@ const tQuantity<TUnit> operator + (tQuantity<TUnit> left, tQuantity<TUnit> right
 // Subtraction
 //----------------------------------------------------------------------
 template <typename TUnit>
-const tQuantity<TUnit> operator - (tQuantity<TUnit> left, tQuantity<TUnit> right)
+tQuantity<TUnit> operator - (tQuantity<TUnit> left, tQuantity<TUnit> right)
 {
   tQuantity<TUnit> result(left);
   result -= right;
@@ -159,18 +159,18 @@ const tQuantity<TUnit> operator - (tQuantity<TUnit> left, tQuantity<TUnit> right
 // Multiplication
 //----------------------------------------------------------------------
 template <typename TLeftUnit, typename TRightUnit>
-const tQuantity<typename operators::tProduct<TLeftUnit, TRightUnit>::tResult> operator *(tQuantity<TLeftUnit> left, tQuantity<TRightUnit> right)
+tQuantity<typename operators::tProduct<TLeftUnit, TRightUnit>::tResult> operator *(tQuantity<TLeftUnit> left, tQuantity<TRightUnit> right)
 {
   return tQuantity<typename operators::tProduct<TLeftUnit, TRightUnit>::tResult>(left.Value() * right.Value());
 }
 
 template <typename TUnit>
-const tQuantity<TUnit> operator *(tQuantity<TUnit> quantity, double scalar)
+tQuantity<TUnit> operator *(tQuantity<TUnit> quantity, double scalar)
 {
   return tQuantity<TUnit>(quantity.Value() * scalar);
 }
 template <typename TUnit>
-const tQuantity<TUnit> operator *(double scalar, tQuantity<TUnit> quantity)
+tQuantity<TUnit> operator *(double scalar, tQuantity<TUnit> quantity)
 {
   return quantity * scalar;
 }
@@ -179,18 +179,18 @@ const tQuantity<TUnit> operator *(double scalar, tQuantity<TUnit> quantity)
 // Division
 //----------------------------------------------------------------------
 template <typename TLeftUnit, typename TRightUnit>
-const tQuantity<typename operators::tQuotient<TLeftUnit, TRightUnit>::tResult> operator / (tQuantity<TLeftUnit> left, tQuantity<TRightUnit> right)
+tQuantity<typename operators::tQuotient<TLeftUnit, TRightUnit>::tResult> operator / (tQuantity<TLeftUnit> left, tQuantity<TRightUnit> right)
 {
   return tQuantity<typename operators::tQuotient<TLeftUnit, TRightUnit>::tResult>(left.Value() / right.Value());
 }
 
 template <typename TUnit>
-const tQuantity<TUnit> operator /(tQuantity<TUnit> quantity, double scalar)
+tQuantity<TUnit> operator /(tQuantity<TUnit> quantity, double scalar)
 {
   return quantity / tQuantity<tSIUnit<0, 0, 0, 0, 0, 0, 0>>(scalar);
 }
 template <typename TUnit>
-const tQuantity<typename operators::tQuotient<tSIUnit<0, 0, 0, 0, 0, 0, 0>, TUnit>::tResult> operator /(double scalar, tQuantity<TUnit> quantity)
+tQuantity<typename operators::tQuotient<tSIUnit<0, 0, 0, 0, 0, 0, 0>, TUnit>::tResult> operator /(double scalar, tQuantity<TUnit> quantity)
 {
   return tQuantity<tSIUnit<0, 0, 0, 0, 0, 0, 0>>(scalar) / quantity;
 }
