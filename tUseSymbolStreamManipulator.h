@@ -72,7 +72,7 @@ namespace si_units
 struct tUseSymbolStreamManipulator
 {
   tSymbol symbol;
-  bool only_once;
+  bool persistent;
 };
 
 
@@ -84,7 +84,7 @@ inline std::ostream &operator << (std::ostream &stream, const tUseSymbolStreamMa
     registry_key = tUserDefinedSymbols::Instance().GetNextStreamKey();
     stream.iword(tUserDefinedSymbolsRegistry::KeyIOSIndex()) = registry_key;
   }
-  tUserDefinedSymbols::Instance().RegisterForStream(registry_key, manipulator.symbol, manipulator.only_once);
+  tUserDefinedSymbols::Instance().RegisterForStream(registry_key, manipulator.symbol, manipulator.persistent);
 
   return stream;
 }
