@@ -72,7 +72,7 @@ namespace si_units
 //----------------------------------------------------------------------
 // Forward declarations / typedefs / enums
 //----------------------------------------------------------------------
-template <typename TUnit>
+template <typename TUnit, typename TValue = double>
 struct tQuantity;
 
 //----------------------------------------------------------------------
@@ -82,8 +82,8 @@ struct tQuantity;
 /*!
  *
  */
-template <int Tlength, int Tmass, int Ttime, int Telectric_current, int Ttemperature, int Tamount_of_substance, int Tluminous_intensity>
-class tQuantity<tSIUnit<Tlength, Tmass, Ttime, Telectric_current, Ttemperature, Tamount_of_substance, Tluminous_intensity>>
+template <int Tlength, int Tmass, int Ttime, int Telectric_current, int Ttemperature, int Tamount_of_substance, int Tluminous_intensity, typename TValue>
+class tQuantity<tSIUnit<Tlength, Tmass, Ttime, Telectric_current, Ttemperature, Tamount_of_substance, Tluminous_intensity>, TValue>
 {
 
 //----------------------------------------------------------------------
@@ -95,13 +95,16 @@ public:
 
   tQuantity() : value(0) {};
 
-  tQuantity(double value)
+  tQuantity(TValue value)
     : value(value)
-  {
-    assert(!isnan(this->value) && !isinf(this->value));
-  };
+  {};
 
-  inline double Value() const
+  explicit inline operator TValue() const
+  {
+    return this->value;
+  }
+
+  inline TValue Value() const
   {
     return this->value;
   }
@@ -118,17 +121,12 @@ public:
     return *this;
   }
 
-  explicit inline operator double() const
-  {
-    return this->value;
-  }
-
 //----------------------------------------------------------------------
 // Private fields and methods
 //----------------------------------------------------------------------
 private:
 
-  double value;
+  TValue value;
 
 };
 
@@ -136,10 +134,10 @@ private:
 //----------------------------------------------------------------------
 // Addition
 //----------------------------------------------------------------------
-template <typename TUnit>
-tQuantity<TUnit> operator + (tQuantity<TUnit> left, tQuantity<TUnit> right)
+template <typename TUnit, typename TLeftValue, typename TRightValue>
+tQuantity < TUnit, decltype(TLeftValue() + TRightValue()) > operator + (tQuantity<TUnit, TLeftValue> left, tQuantity<TUnit, TRightValue> right)
 {
-  tQuantity<TUnit> result(left);
+  tQuantity < TUnit, decltype(TLeftValue() + TRightValue()) > result(left);
   result += right;
   return result;
 }
@@ -147,10 +145,10 @@ tQuantity<TUnit> operator + (tQuantity<TUnit> left, tQuantity<TUnit> right)
 //----------------------------------------------------------------------
 // Subtraction
 //----------------------------------------------------------------------
-template <typename TUnit>
-tQuantity<TUnit> operator - (tQuantity<TUnit> left, tQuantity<TUnit> right)
+template <typename TUnit, typename TLeftValue, typename TRightValue>
+tQuantity < TUnit, decltype(TLeftValue() - TRightValue()) > operator - (tQuantity<TUnit, TLeftValue> left, tQuantity<TUnit, TRightValue> right)
 {
-  tQuantity<TUnit> result(left);
+  tQuantity < TUnit, decltype(TLeftValue() - TRightValue()) > result(left);
   result -= right;
   return result;
 }
@@ -158,19 +156,19 @@ tQuantity<TUnit> operator - (tQuantity<TUnit> left, tQuantity<TUnit> right)
 //----------------------------------------------------------------------
 // Multiplication
 //----------------------------------------------------------------------
-template <typename TLeftUnit, typename TRightUnit>
-tQuantity<typename operators::tProduct<TLeftUnit, TRightUnit>::tResult> operator *(tQuantity<TLeftUnit> left, tQuantity<TRightUnit> right)
+template <typename TLeftUnit, typename TRightUnit, typename TLeftValue, typename TRightValue>
+tQuantity<typename operators::tProduct<TLeftUnit, TRightUnit>::tResult, decltype(TLeftValue() * TRightValue())> operator *(tQuantity<TLeftUnit, TLeftValue> left, tQuantity<TRightUnit, TRightValue> right)
 {
-  return tQuantity<typename operators::tProduct<TLeftUnit, TRightUnit>::tResult>(left.Value() * right.Value());
+  return tQuantity<typename operators::tProduct<TLeftUnit, TRightUnit>::tResult, decltype(TLeftValue() * TRightValue())>(left.Value() * right.Value());
 }
 
-template <typename TUnit>
-tQuantity<TUnit> operator *(tQuantity<TUnit> quantity, double scalar)
+template <typename TUnit, typename TValue>
+tQuantity<TUnit, decltype(TValue() * double())> operator *(tQuantity<TUnit, TValue> quantity, double scalar)
 {
-  return tQuantity<TUnit>(quantity.Value() * scalar);
+  return tQuantity<TUnit, TValue>(quantity.Value() * scalar);
 }
-template <typename TUnit>
-tQuantity<TUnit> operator *(double scalar, tQuantity<TUnit> quantity)
+template <typename TUnit, typename TValue>
+tQuantity<TUnit, decltype(double() * TValue())> operator *(double scalar, tQuantity<TUnit, TValue> quantity)
 {
   return quantity * scalar;
 }
@@ -178,19 +176,19 @@ tQuantity<TUnit> operator *(double scalar, tQuantity<TUnit> quantity)
 //----------------------------------------------------------------------
 // Division
 //----------------------------------------------------------------------
-template <typename TLeftUnit, typename TRightUnit>
-tQuantity<typename operators::tQuotient<TLeftUnit, TRightUnit>::tResult> operator / (tQuantity<TLeftUnit> left, tQuantity<TRightUnit> right)
+template <typename TLeftUnit, typename TRightUnit, typename TLeftValue, typename TRightValue>
+tQuantity < typename operators::tQuotient<TLeftUnit, TRightUnit>::tResult, decltype(TLeftValue() / TRightValue()) > operator / (tQuantity<TLeftUnit, TLeftValue> left, tQuantity<TRightUnit, TRightValue> right)
 {
-  return tQuantity<typename operators::tQuotient<TLeftUnit, TRightUnit>::tResult>(left.Value() / right.Value());
+  return tQuantity < typename operators::tQuotient<TLeftUnit, TRightUnit>::tResult, decltype(TLeftValue() / TRightValue()) > (left.Value() / right.Value());
 }
 
-template <typename TUnit>
-tQuantity<TUnit> operator /(tQuantity<TUnit> quantity, double scalar)
+template <typename TUnit, typename TValue>
+tQuantity < TUnit, decltype(TValue() / double()) > operator /(tQuantity<TUnit, TValue> quantity, double scalar)
 {
   return quantity / tQuantity<tSIUnit<0, 0, 0, 0, 0, 0, 0>>(scalar);
 }
-template <typename TUnit>
-tQuantity<typename operators::tQuotient<tSIUnit<0, 0, 0, 0, 0, 0, 0>, TUnit>::tResult> operator /(double scalar, tQuantity<TUnit> quantity)
+template <typename TUnit, typename TValue>
+tQuantity < typename operators::tQuotient<tSIUnit<0, 0, 0, 0, 0, 0, 0>, TUnit>::tResult, decltype(double() / TValue()) > operator /(double scalar, tQuantity<TUnit, TValue> quantity)
 {
   return tQuantity<tSIUnit<0, 0, 0, 0, 0, 0, 0>>(scalar) / quantity;
 }
@@ -198,44 +196,44 @@ tQuantity<typename operators::tQuotient<tSIUnit<0, 0, 0, 0, 0, 0, 0>, TUnit>::tR
 //----------------------------------------------------------------------
 // Comparison
 //----------------------------------------------------------------------
-template <typename TUnit>
-const bool operator == (tQuantity<TUnit> left, tQuantity<TUnit> right)
+template <typename TUnit, typename TLeftValue, typename TRightValue>
+const bool operator == (tQuantity<TUnit, TLeftValue> left, tQuantity<TUnit, TRightValue> right)
 {
   return left.Value() == right.Value();
 }
 
-template <typename TUnit>
-const bool operator != (tQuantity<TUnit> left, tQuantity<TUnit> right)
+template <typename TUnit, typename TLeftValue, typename TRightValue>
+const bool operator != (tQuantity<TUnit, TLeftValue> left, tQuantity<TUnit, TRightValue> right)
 {
   return !(left == right);
 }
 
-template <typename TUnit>
-const bool operator < (tQuantity<TUnit> left, tQuantity<TUnit> right)
+template <typename TUnit, typename TLeftValue, typename TRightValue>
+const bool operator < (tQuantity<TUnit, TLeftValue> left, tQuantity<TUnit, TRightValue> right)
 {
   return left.Value() < right.Value();
 }
 
-template <typename TUnit>
-const bool operator > (tQuantity<TUnit> left, tQuantity<TUnit> right)
+template <typename TUnit, typename TLeftValue, typename TRightValue>
+const bool operator > (tQuantity<TUnit, TLeftValue> left, tQuantity<TUnit, TRightValue> right)
 {
   return left.Value() > right.Value();
 }
 
-template <typename TUnit>
-const bool operator <= (tQuantity<TUnit> left, tQuantity<TUnit> right)
+template <typename TUnit, typename TLeftValue, typename TRightValue>
+const bool operator <= (tQuantity<TUnit, TLeftValue> left, tQuantity<TUnit, TRightValue> right)
 {
   return !(left > right);
 }
 
-template <typename TUnit>
-const bool operator >= (tQuantity<TUnit> left, tQuantity<TUnit> right)
+template <typename TUnit, typename TLeftValue, typename TRightValue>
+const bool operator >= (tQuantity<TUnit, TLeftValue> left, tQuantity<TUnit, TRightValue> right)
 {
   return !(left < right);
 }
 
-template <typename TUnit>
-const bool IsEqual(tQuantity<TUnit> a, tQuantity<TUnit> b, float max_error = 1.0E-6, math::tFloatComparisonMethod method = math::eFCM_ABSOLUTE_ERROR)
+template <typename TUnit, typename TLeftValue, typename TRightValue>
+const bool IsEqual(tQuantity<TUnit, TLeftValue> a, tQuantity<TUnit, TRightValue> b, float max_error = 1.0E-6, math::tFloatComparisonMethod method = math::eFCM_ABSOLUTE_ERROR)
 {
   return IsEqual(a.Value(), b.Value(), max_error, method);
 }
@@ -243,8 +241,8 @@ const bool IsEqual(tQuantity<TUnit> a, tQuantity<TUnit> b, float max_error = 1.0
 //----------------------------------------------------------------------
 // Streaming
 //----------------------------------------------------------------------
-template <typename TUnit>
-std::ostream &operator << (std::ostream &stream, tQuantity<TUnit> quantity)
+template <typename TUnit, typename TValue>
+std::ostream &operator << (std::ostream &stream, tQuantity<TUnit, TValue> quantity)
 {
   stream << quantity.Value() << " " << TUnit();
   return stream;
@@ -252,24 +250,24 @@ std::ostream &operator << (std::ostream &stream, tQuantity<TUnit> quantity)
 
 #ifdef _LIB_RRLIB_SERIALIZATION_PRESENT_
 
-template <typename TUnit>
-inline serialization::tOutputStream& operator << (serialization::tOutputStream &stream, tQuantity<TUnit> quantity)
+template <typename TUnit, typename TValue>
+inline serialization::tOutputStream& operator << (serialization::tOutputStream &stream, tQuantity<TUnit, TValue> quantity)
 {
   stream << quantity.Value();
   return stream;
 }
 
-template <typename TUnit>
-inline serialization::tInputStream& operator >> (serialization::tInputStream &stream, tQuantity<TUnit> &quantity)
+template <typename TUnit, typename TValue>
+inline serialization::tInputStream& operator >> (serialization::tInputStream &stream, tQuantity<TUnit, TValue> &quantity)
 {
   double value;
   stream >> value;
-  quantity = tQuantity<TUnit>(value);
+  quantity = tQuantity<TUnit, TValue>(value);
   return stream;
 }
 
-template <typename TUnit>
-inline serialization::tStringOutputStream &operator << (serialization::tStringOutputStream &stream, tQuantity<TUnit> quantity)
+template <typename TUnit, typename TValue>
+inline serialization::tStringOutputStream &operator << (serialization::tStringOutputStream &stream, tQuantity<TUnit, TValue> quantity)
 {
   std::stringstream str;
   str << quantity;

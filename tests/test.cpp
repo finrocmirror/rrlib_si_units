@@ -73,6 +73,7 @@ class tTestSIUnits : public util::tUnitTestSuite
 {
   RRLIB_UNIT_TESTS_BEGIN_SUITE(tTestSIUnits);
   RRLIB_UNIT_TESTS_ADD_TEST(BasicOperations);
+  RRLIB_UNIT_TESTS_ADD_TEST(MixedValueTypes);
   RRLIB_UNIT_TESTS_ADD_TEST(Typedefs);
   RRLIB_UNIT_TESTS_ADD_TEST(Symbols);
   RRLIB_UNIT_TESTS_END_SUITE;
@@ -95,8 +96,20 @@ private:
     RRLIB_UNIT_TESTS_ASSERT((std::is_same < decltype(length / time), tQuantity < tSIUnit < 1, 0, -1, 0, 0, 0, 0 >>>::value));
     RRLIB_UNIT_TESTS_EQUALITY((tQuantity < tSIUnit < 1, 0, -1, 0, 0, 0, 0 >> (5.0)), length / time);
 
-    tVelocity velocity = length / time;
-    RRLIB_UNIT_TESTS_EQUALITY(tVelocity(2.5), 0.5 * velocity);
+    tVelocity<> velocity = length / time;
+    RRLIB_UNIT_TESTS_EQUALITY(tVelocity<>(2.5), 0.5 * velocity);
+    RRLIB_UNIT_TESTS_EQUALITY(0.5 * velocity, velocity * 0.5);
+  }
+
+  void MixedValueTypes()
+  {
+    tQuantity<tSIUnit<1, 0, 0, 0, 0, 0, 0>> length = 10.0;
+    tQuantity<tSIUnit<0, 0, 1, 0, 0, 0, 0>, float> time = 2.0;
+    RRLIB_UNIT_TESTS_ASSERT((std::is_same < decltype(length / time), tQuantity < tSIUnit < 1, 0, -1, 0, 0, 0, 0 >>>::value));
+    RRLIB_UNIT_TESTS_EQUALITY((tQuantity < tSIUnit < 1, 0, -1, 0, 0, 0, 0 >> (5.0)), length / time);
+
+    tVelocity<> velocity = length / time;
+    RRLIB_UNIT_TESTS_EQUALITY(tVelocity<>(2.5), 0.5 * velocity);
     RRLIB_UNIT_TESTS_EQUALITY(0.5 * velocity, velocity * 0.5);
   }
 
@@ -114,31 +127,31 @@ private:
   void Symbols()
   {
     std::stringstream stream;
-    stream << tVelocity();
+    stream << tVelocity<>();
     RRLIB_UNIT_TESTS_EQUALITY(std::string("0 m/s"), stream.str());
 
     stream.str("");
-    stream << tFrequency();
+    stream << tFrequency<>();
     RRLIB_UNIT_TESTS_EQUALITY(std::string("0 1/s"), stream.str());
 
     stream.str("");
-    stream << UseSymbol(tHertz(), "Hz", false) << tFrequency() << tFrequency();
+    stream << UseSymbol(tHertz(), "Hz", false) << tFrequency<>() << tFrequency<>();
     RRLIB_UNIT_TESTS_EQUALITY(std::string("0 Hz0 1/s"), stream.str());
 
     stream.str("");
-    stream << UseSymbol(tHertz(), "Hz") << tFrequency() << tFrequency();
+    stream << UseSymbol(tHertz(), "Hz") << tFrequency<>() << tFrequency<>();
     RRLIB_UNIT_TESTS_EQUALITY(std::string("0 Hz0 Hz"), stream.str());
 
     stream.str("");
-    stream << tLength(1) / tLength(1) / tLength(1) / tLength(1) / tLength(1) / tLength(1) * tTemperature(1);
+    stream << tLength<>(1) / tLength<>(1) / tLength<>(1) / tLength<>(1) / tLength<>(1) / tLength<>(1) * tTemperature<>(1);
     RRLIB_UNIT_TESTS_EQUALITY(std::string("1 K/m^4"), stream.str());
 
     stream.str("");
-    stream << tForce(1) * tLength(1);
+    stream << tForce<>(1) * tLength<>(1);
     RRLIB_UNIT_TESTS_EQUALITY(std::string("1 Nm"), stream.str());
 
     stream.str("");
-    stream << 1 / (tForce(1) * tLength(1));
+    stream << 1 / (tForce<>(1) * tLength<>(1));
     RRLIB_UNIT_TESTS_EQUALITY(std::string("1 1/Nm"), stream.str());
   }
 };

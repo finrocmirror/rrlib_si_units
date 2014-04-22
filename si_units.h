@@ -74,13 +74,13 @@ typedef tSIUnit<0, 0, 0, 0, 0, 1, 0> tMole;
 typedef tSIUnit<0, 0, 0, 0, 0, 0, 1> tCandela;
 
 // the seven basic quantities
-typedef tQuantity<tMeter> tLength;
-typedef tQuantity<tKilogram> tMass;
-typedef tQuantity<tSecond> tTime;
-typedef tQuantity<tAmpere> tElectricCurrent;
-typedef tQuantity<tKelvin> tTemperature;
-typedef tQuantity<tMole> tAmountOfSubstance;
-typedef tQuantity<tCandela> tLuminousIntensity;
+template <typename T = double> using tLength = tQuantity<tMeter, T>;
+template <typename T = double> using tMass = tQuantity<tKilogram, T>;
+template <typename T = double> using tTime = tQuantity<tSecond, T>;
+template <typename T = double> using tElectricCurrent = tQuantity<tAmpere, T>;
+template <typename T = double> using tTemperature = tQuantity<tKelvin, T>;
+template <typename T = double> using tAmountOfSubstance = tQuantity<tMole, T>;
+template <typename T = double> using tLuminousIntensity = tQuantity<tCandela, T>;
 
 // some derived units
 typedef tSIUnit < 0, 0, -1, 0, 0, 0, 0 > tHertz;
@@ -88,12 +88,12 @@ typedef tSIUnit < 1, 1, -2, 0, 0, 0, 0 > tNewton;
 typedef tSIUnit < -1, 1, -2, 0, 0, 0, 0 > tPascal;
 
 // some derived quantities
-typedef tQuantity<tHertz> tFrequency;
-typedef tQuantity<tNewton> tForce;
-typedef tQuantity<tPascal> tPressure;
+template <typename T = double> using tFrequency = tQuantity<tHertz, T>;
+template <typename T = double> using tForce = tQuantity<tNewton, T>;
+template <typename T = double> using tPressure = tQuantity<tPascal, T>;
 
-typedef tQuantity < tSIUnit < 1, 0, -1, 0, 0, 0, 0 >> tVelocity;
-typedef tQuantity < tSIUnit < 1, 0, -2, 0, 0, 0, 0 >> tAcceleration;
+template <typename T = double> using tVelocity = tQuantity < tSIUnit < 1, 0, -1, 0, 0, 0, 0 > , T >;
+template <typename T = double> using tAcceleration = tQuantity < tSIUnit < 1, 0, -2, 0, 0, 0, 0 > , T >;
 
 
 //----------------------------------------------------------------------
