@@ -93,11 +93,23 @@ public:
 
   typedef tSIUnit<Tlength, Tmass, Ttime, Telectric_current, Ttemperature, Tamount_of_substance, Tluminous_intensity> tUnit;
 
-  tQuantity() : value(0) {};
+  tQuantity() : value(0) {}
 
   tQuantity(TValue value)
     : value(value)
-  {};
+  {}
+
+  template <typename TOtherValue>
+  tQuantity(tQuantity<tUnit, TOtherValue> other)
+    : value(other.Value())
+  {}
+
+  template <typename TOtherValue>
+  tQuantity &operator= (tQuantity<tUnit, TOtherValue> other)
+  {
+    this->value = other.Value();
+    return *this;
+  }
 
   explicit inline operator TValue() const
   {
@@ -130,6 +142,14 @@ private:
 
 };
 
+//----------------------------------------------------------------------
+// Unary minus
+//----------------------------------------------------------------------
+template <typename TUnit, typename TValue>
+tQuantity<TUnit, TValue> operator - (tQuantity<TUnit, TValue> value)
+{
+  return tQuantity<TUnit, TValue>(-value.Value());
+}
 
 //----------------------------------------------------------------------
 // Addition
@@ -162,13 +182,13 @@ tQuantity<typename operators::tProduct<TLeftUnit, TRightUnit>::tResult, decltype
   return tQuantity<typename operators::tProduct<TLeftUnit, TRightUnit>::tResult, decltype(TLeftValue() * TRightValue())>(left.Value() * right.Value());
 }
 
-template <typename TUnit, typename TValue>
-tQuantity<TUnit, decltype(TValue() * double())> operator *(tQuantity<TUnit, TValue> quantity, double scalar)
+template <typename TUnit, typename TValue, typename TScalar>
+tQuantity<TUnit, decltype(TValue() * TScalar())> operator *(tQuantity<TUnit, TValue> quantity, TScalar scalar)
 {
-  return tQuantity<TUnit, TValue>(quantity.Value() * scalar);
+  return tQuantity<TUnit, decltype(TValue() * TScalar())>(quantity.Value() * scalar);
 }
-template <typename TUnit, typename TValue>
-tQuantity<TUnit, decltype(double() * TValue())> operator *(double scalar, tQuantity<TUnit, TValue> quantity)
+template <typename TUnit, typename TValue, typename TScalar>
+tQuantity<TUnit, decltype(TScalar() * TValue())> operator *(TScalar scalar, tQuantity<TUnit, TValue> quantity)
 {
   return quantity * scalar;
 }
