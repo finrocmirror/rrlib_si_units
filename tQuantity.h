@@ -280,7 +280,7 @@ inline serialization::tOutputStream& operator << (serialization::tOutputStream &
 template <typename TUnit, typename TValue>
 inline serialization::tInputStream& operator >> (serialization::tInputStream &stream, tQuantity<TUnit, TValue> &quantity)
 {
-  double value;
+  TValue value;
   stream >> value;
   quantity = tQuantity<TUnit, TValue>(value);
   return stream;
