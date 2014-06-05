@@ -69,9 +69,9 @@ namespace si_units
 //----------------------------------------------------------------------
 // Implementation
 //----------------------------------------------------------------------
-class tTestSIUnits : public util::tUnitTestSuite
+class TestSIUnits : public util::tUnitTestSuite
 {
-  RRLIB_UNIT_TESTS_BEGIN_SUITE(tTestSIUnits);
+  RRLIB_UNIT_TESTS_BEGIN_SUITE(TestSIUnits);
   RRLIB_UNIT_TESTS_ADD_TEST(BasicOperations);
   RRLIB_UNIT_TESTS_ADD_TEST(MixedValueTypes);
   RRLIB_UNIT_TESTS_ADD_TEST(Typedefs);
@@ -79,12 +79,6 @@ class tTestSIUnits : public util::tUnitTestSuite
   RRLIB_UNIT_TESTS_END_SUITE;
 
 private:
-
-  virtual void InitializeTests()
-  {}
-
-  virtual void CleanUp()
-  {}
 
   void BasicOperations()
   {
@@ -156,7 +150,7 @@ private:
   }
 };
 
-RRLIB_UNIT_TESTS_REGISTER_SUITE(tTestSIUnits);
+RRLIB_UNIT_TESTS_REGISTER_SUITE(TestSIUnits);
 
 //----------------------------------------------------------------------
 // End of namespace declaration
