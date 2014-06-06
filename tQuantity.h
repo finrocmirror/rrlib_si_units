@@ -73,7 +73,7 @@ namespace si_units
 // Forward declarations / typedefs / enums
 //----------------------------------------------------------------------
 template <typename TUnit, typename TValue = double>
-struct tQuantity;
+class tQuantity;
 
 //----------------------------------------------------------------------
 // Class declaration
@@ -295,16 +295,14 @@ inline serialization::tStringOutputStream &operator << (serialization::tStringOu
   return stream;
 }
 
-template <typename TUnit>
-inline serialization::tStringInputStream &operator >> (serialization::tStringInputStream &stream, tQuantity<TUnit> &quantity)
+template <typename TUnit, typename TValue>
+inline serialization::tStringInputStream &operator >> (serialization::tStringInputStream &stream, tQuantity<TUnit, TValue> &quantity)
 {
-  RRLIB_LOG_PRINT(ERROR, "De-Serializing from strings not (yet) supported");
-  throw std::exception();
+  RRLIB_LOG_THROW(std::exception("De-Serializing from strings not (yet) supported"));
   return stream;
 }
 
 #endif
-
 
 //----------------------------------------------------------------------
 // End of namespace declaration

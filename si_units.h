@@ -64,6 +64,8 @@ namespace si_units
 //----------------------------------------------------------------------
 // Forward declarations / typedefs / enums
 //----------------------------------------------------------------------
+typedef tSIUnit<0, 0, 0, 0, 0, 0, 0> tNoUnit;
+
 // the seven basic units
 typedef tSIUnit<1, 0, 0, 0, 0, 0, 0> tMeter;
 typedef tSIUnit<0, 1, 0, 0, 0, 0, 0> tKilogram;
