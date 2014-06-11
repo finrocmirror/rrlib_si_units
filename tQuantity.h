@@ -298,7 +298,7 @@ inline serialization::tStringOutputStream &operator << (serialization::tStringOu
 template <typename TUnit, typename TValue>
 inline serialization::tStringInputStream &operator >> (serialization::tStringInputStream &stream, tQuantity<TUnit, TValue> &quantity)
 {
-  RRLIB_LOG_THROW(std::exception("De-Serializing from strings not (yet) supported"));
+  RRLIB_LOG_THROW(std::runtime_error("De-Serializing from strings not (yet) supported"));
   return stream;
 }
 
