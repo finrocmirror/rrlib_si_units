@@ -76,6 +76,7 @@ class TestSIUnits : public util::tUnitTestSuite
   RRLIB_UNIT_TESTS_ADD_TEST(MixedValueTypes);
   RRLIB_UNIT_TESTS_ADD_TEST(Typedefs);
   RRLIB_UNIT_TESTS_ADD_TEST(Symbols);
+  RRLIB_UNIT_TESTS_ADD_TEST(Streaming);
   RRLIB_UNIT_TESTS_END_SUITE;
 
 private:
@@ -147,6 +148,25 @@ private:
     stream.str("");
     stream << 1 / (tForce<>(1) * tLength<>(1));
     RRLIB_UNIT_TESTS_EQUALITY(std::string("1 1/Nm"), stream.str());
+  }
+
+  void Streaming()
+  {
+    tLength<double> length;
+    tForce<float> force;
+
+    serialization::tMemoryBuffer memory_buffer;
+    serialization::tOutputStream output_stream(memory_buffer);
+    serialization::tInputStream input_stream(memory_buffer);
+
+    output_stream << tLength<double>(10);
+    output_stream << tForce<float>(20);
+    output_stream.Flush();
+
+    input_stream >> length;
+    RRLIB_UNIT_TESTS_EQUALITY(tLength<double>(10), length);
+    input_stream >> force;
+    RRLIB_UNIT_TESTS_EQUALITY(tForce<float>(20), force);
   }
 };
 
