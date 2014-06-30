@@ -111,9 +111,10 @@ public:
     return *this;
   }
 
-  explicit inline operator TValue() const
+  template <typename T>
+  explicit inline operator T() const
   {
-    return this->value;
+    return static_cast<T>(this->value);
   }
 
   inline TValue Value() const
