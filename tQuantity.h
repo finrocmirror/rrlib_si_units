@@ -42,6 +42,7 @@
 // External includes (system with <>, local with "")
 //----------------------------------------------------------------------
 #include <cmath>
+#include <type_traits>
 
 #include "rrlib/math/utilities.h"
 
@@ -78,12 +79,15 @@ class tQuantity;
 //----------------------------------------------------------------------
 // Class declaration
 //----------------------------------------------------------------------
+class tQuantityBase
+{};
+
 //!
 /*!
  *
  */
 template <int Tlength, int Tmass, int Ttime, int Telectric_current, int Ttemperature, int Tamount_of_substance, int Tluminous_intensity, typename TValue>
-class tQuantity<tSIUnit<Tlength, Tmass, Ttime, Telectric_current, Ttemperature, Tamount_of_substance, Tluminous_intensity>, TValue>
+class tQuantity<tSIUnit<Tlength, Tmass, Ttime, Telectric_current, Ttemperature, Tamount_of_substance, Tluminous_intensity>, TValue> : public tQuantityBase
 {
 
 //----------------------------------------------------------------------
@@ -111,7 +115,7 @@ public:
     return *this;
   }
 
-  template <typename T>
+  template < typename T, typename = typename std::enable_if < !std::is_base_of<tQuantityBase, T>::value, int >::type >
   explicit inline operator T() const
   {
     return static_cast<T>(this->value);
