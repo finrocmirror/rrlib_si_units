@@ -97,10 +97,14 @@ public:
 
   typedef tSIUnit<Tlength, Tmass, Ttime, Telectric_current, Ttemperature, Tamount_of_substance, Tluminous_intensity> tUnit;
 
-  tQuantity() : value(0) {}
+  tQuantity()
+  {
+    std::memset(this, 0, sizeof(tQuantity));
+  }
 
-  tQuantity(TValue value)
-    : value(value)
+  template < typename T, typename = typename std::enable_if < !std::is_base_of<tQuantityBase, T>::value, decltype(TValue(T())) >::type >
+  tQuantity(T value)
+    : value(TValue(value))
   {}
 
   template <typename TOtherValue>
@@ -115,7 +119,7 @@ public:
     return *this;
   }
 
-  template < typename T, typename = typename std::enable_if < !std::is_base_of<tQuantityBase, T>::value, int >::type >
+  template < typename T, typename = typename std::enable_if < !std::is_base_of<tQuantityBase, T>::value, decltype(T(TValue())) >::type >
   explicit inline operator T() const
   {
     return static_cast<T>(this->value);
