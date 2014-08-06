@@ -37,6 +37,7 @@
 //----------------------------------------------------------------------
 // External includes (system with <>, local with "")
 //----------------------------------------------------------------------
+#include "rrlib/math/tAngle.h"
 
 //----------------------------------------------------------------------
 // Internal includes with ""
@@ -46,6 +47,7 @@
 #include "rrlib/si_units/tSIUnit.h"
 #include "rrlib/si_units/tQuantity.h"
 #include "rrlib/si_units/tUseSymbolStreamManipulator.h"
+#include "rrlib/si_units/rtti.h"
 
 #undef __rrlib__si_units__include_guard__
 
@@ -97,6 +99,7 @@ template <typename T = double> using tPressure = tQuantity<tPascal, T>;
 template <typename T = double> using tVelocity = tQuantity < tSIUnit < 1, 0, -1, 0, 0, 0, 0 > , T >;
 template <typename T = double> using tAcceleration = tQuantity < tSIUnit < 1, 0, -2, 0, 0, 0, 0 > , T >;
 
+template <typename T = double, typename TAngleUnit = math::angle::Radian> using tAngularVelocity = tQuantity<tHertz, math::tAngle<T, TAngleUnit, math::angle::NoWrap>>;
 
 //----------------------------------------------------------------------
 // Const values

@@ -5,6 +5,7 @@
   <library>
     <sources>
       operators/*
+      rtti.cpp
       si_units.h
       tQuantity.h
       tSIUnit.cpp
