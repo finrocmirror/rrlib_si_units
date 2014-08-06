@@ -64,21 +64,29 @@ namespace si_units
 // Const values
 //----------------------------------------------------------------------
 
-const std::set<tSymbol> cBASIC_UNIT_SYMBOLS
+const std::set<tSymbol> &BasicUnitSymbols()
 {
-  tSymbol(tMeter(), "m"),
-  tSymbol(tKilogram(), "kg"),
-  tSymbol(tSecond(), "s"),
-  tSymbol(tAmpere(), "A"),
-  tSymbol(tKelvin(), "K"),
-  tSymbol(tCandela(), "cd"),
-  tSymbol(tMole(), "mol")
-};
+  static const std::set<tSymbol> cBASIC_UNIT_SYMBOLS
+  {
+    tSymbol(tMeter(), "m"),
+    tSymbol(tKilogram(), "kg"),
+    tSymbol(tSecond(), "s"),
+    tSymbol(tAmpere(), "A"),
+    tSymbol(tKelvin(), "K"),
+    tSymbol(tCandela(), "cd"),
+    tSymbol(tMole(), "mol")
+  };
+  return cBASIC_UNIT_SYMBOLS;
+}
 
-const std::set<tSymbol> cDERIVED_UNIT_SYMBOLS
+const std::set<tSymbol> &DerivedUnitSymbols()
 {
-  tSymbol(tNewton(), "N"),
-  tSymbol(tPascal(), "Pa")
+  static const std::set<tSymbol> cDERIVED_UNIT_SYMBOLS
+  {
+    tSymbol(tNewton(), "N"),
+    tSymbol(tPascal(), "Pa")
+  };
+  return cDERIVED_UNIT_SYMBOLS;
 };
 
 //----------------------------------------------------------------------
@@ -176,8 +184,8 @@ void DetermineSymbolComponentsFromExponentList(std::vector<std::string> &nominat
     tUserDefinedSymbols::Instance().ClearTemporaryStreamSymbols(registry_key);
   }
   symbols.insert(tUserDefinedSymbols::Instance().GlobalSymbols().rbegin(), tUserDefinedSymbols::Instance().GlobalSymbols().rend());
-  symbols.insert(cDERIVED_UNIT_SYMBOLS.begin(), cDERIVED_UNIT_SYMBOLS.end());
-  symbols.insert(cBASIC_UNIT_SYMBOLS.begin(), cBASIC_UNIT_SYMBOLS.end());
+  symbols.insert(DerivedUnitSymbols().begin(), DerivedUnitSymbols().end());
+  symbols.insert(BasicUnitSymbols().begin(), BasicUnitSymbols().end());
 
   for (auto it = symbols.rbegin(); it != symbols.rend(); ++it)
   {
