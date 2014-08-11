@@ -72,7 +72,7 @@ struct TypeName<si_units::tQuantity<TUnit, TValue>>
   static std::string Get()
   {
     std::stringstream str;
-    str << "tQuantity<" << TUnit() << ", " << TypeName<TValue>::Get() << ">";
+    str << "Quantity<" << TUnit() << ", " << TypeName<TValue>::Get() << ">";
     return str.str();
   }
 };

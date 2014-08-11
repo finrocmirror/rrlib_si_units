@@ -32,7 +32,6 @@
 // External includes (system with <>, local with "")
 //----------------------------------------------------------------------
 #include <set>
-#include <boost/lexical_cast.hpp>
 
 //----------------------------------------------------------------------
 // Internal includes with ""
@@ -136,7 +135,7 @@ void ProcessSymbol(std::vector<std::string> &output, int *exponents, const tSymb
     output.push_back(symbol.cSYMBOL);
     if (multiplicity > 1)
     {
-      output.back() += "^" + boost::lexical_cast<std::string>(multiplicity);
+      output.back() += "^" + std::to_string(multiplicity);
     }
   }
 }
