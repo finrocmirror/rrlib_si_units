@@ -77,6 +77,7 @@ class TestSIUnits : public util::tUnitTestSuite
   RRLIB_UNIT_TESTS_ADD_TEST(Typedefs);
   RRLIB_UNIT_TESTS_ADD_TEST(Symbols);
   RRLIB_UNIT_TESTS_ADD_TEST(Streaming);
+  RRLIB_UNIT_TESTS_ADD_TEST(Conversions);
   RRLIB_UNIT_TESTS_END_SUITE;
 
 private:
@@ -167,6 +168,25 @@ private:
     RRLIB_UNIT_TESTS_EQUALITY(tLength<double>(10), length);
     input_stream >> force;
     RRLIB_UNIT_TESTS_EQUALITY(tForce<float>(20), force);
+  }
+
+  void Conversions()
+  {
+    time::tDuration duration(std::chrono::seconds(2));
+    tTime<> time(duration);
+    RRLIB_UNIT_TESTS_EQUALITY(time, tTime<>(2));
+    time = duration;
+    RRLIB_UNIT_TESTS_EQUALITY(time, tTime<>(2));
+    tVelocity<> velocity(10);
+    tLength<> length = duration * velocity;
+    RRLIB_UNIT_TESTS_EQUALITY(length, tLength<>(20));
+    velocity = length / duration;
+    RRLIB_UNIT_TESTS_EQUALITY(velocity, tVelocity<>(10));
+    RRLIB_UNIT_TESTS_EQUALITY(time::tDuration(std::chrono::seconds(5)).count(), time::tDuration(tTime<>(5)).count());
+    RRLIB_UNIT_TESTS_EQUALITY(tTime<>(7), time + time::tDuration(std::chrono::seconds(5)));
+    RRLIB_UNIT_TESTS_EQUALITY(tTime<>(8), time::tDuration(std::chrono::seconds(6)) + time);
+    RRLIB_UNIT_TESTS_EQUALITY(tTime<>(1), time - time::tDuration(std::chrono::seconds(1)));
+    RRLIB_UNIT_TESTS_EQUALITY(tTime<>(3), time::tDuration(std::chrono::seconds(5)) - time);
   }
 };
 

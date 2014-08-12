@@ -43,6 +43,7 @@
 //----------------------------------------------------------------------
 #include <cmath>
 #include <type_traits>
+#include <chrono>
 
 #include "rrlib/math/utilities.h"
 
@@ -51,7 +52,6 @@
 //----------------------------------------------------------------------
 #include "rrlib/si_units/operators/tProduct.h"
 #include "rrlib/si_units/operators/tQuotient.h"
-
 
 #ifdef _LIB_RRLIB_SERIALIZATION_PRESENT_
 #include "rrlib/serialization/serialization.h"
@@ -107,6 +107,11 @@ public:
     : value(TValue(value))
   {}
 
+  template <typename TRep, typename TPeriod, typename = typename std::enable_if <std::is_same<tUnit, tSIUnit<0, 0, 1, 0, 0, 0, 0>>::value, TRep>::type>
+  tQuantity(std::chrono::duration<TRep, TPeriod> duration)
+    : value(std::chrono::nanoseconds(duration).count() * 1E-9)
+  {}
+
   template <typename TOtherValue>
   tQuantity(tQuantity<tUnit, TOtherValue> other)
     : value(other.Value())
@@ -123,6 +128,12 @@ public:
   explicit inline operator T() const
   {
     return static_cast<T>(this->value);
+  }
+
+  template <typename TRep, typename TPeriod, typename = typename std::enable_if <std::is_same<tUnit, tSIUnit<0, 0, 1, 0, 0, 0, 0>>::value, TRep>::type>
+  explicit inline operator std::chrono::duration<TRep, TPeriod>() const
+  {
+    return std::chrono::duration_cast<std::chrono::duration<TRep, TPeriod>>(std::chrono::nanoseconds(TRep(this->value * 1E+9)));
   }
 
   inline TValue Value() const
@@ -171,6 +182,17 @@ tQuantity < TUnit, decltype(TLeftValue() + TRightValue()) > operator + (tQuantit
   return result;
 }
 
+template <typename TValue, typename TRep, typename TPeriod>
+tQuantity<tSIUnit<0, 0, 1, 0, 0, 0, 0>, TValue> operator + (tQuantity<tSIUnit<0, 0, 1, 0, 0, 0, 0>, TValue> time, std::chrono::duration<TRep, TPeriod> duration)
+{
+  return time + tQuantity<tSIUnit<0, 0, 1, 0, 0, 0, 0>, TValue>(duration);
+}
+template <typename TValue, typename TRep, typename TPeriod>
+tQuantity<tSIUnit<0, 0, 1, 0, 0, 0, 0>, TValue> operator + (std::chrono::duration<TRep, TPeriod> duration, tQuantity<tSIUnit<0, 0, 1, 0, 0, 0, 0>, TValue> time)
+{
+  return time + duration;
+}
+
 //----------------------------------------------------------------------
 // Subtraction
 //----------------------------------------------------------------------
@@ -180,6 +202,17 @@ tQuantity < TUnit, decltype(TLeftValue() - TRightValue()) > operator - (tQuantit
   tQuantity < TUnit, decltype(TLeftValue() - TRightValue()) > result(left);
   result -= right;
   return result;
+}
+
+template <typename TValue, typename TRep, typename TPeriod>
+tQuantity<tSIUnit<0, 0, 1, 0, 0, 0, 0>, TValue> operator - (tQuantity<tSIUnit<0, 0, 1, 0, 0, 0, 0>, TValue> time, std::chrono::duration<TRep, TPeriod> duration)
+{
+  return time - tQuantity<tSIUnit<0, 0, 1, 0, 0, 0, 0>, TValue>(duration);
+}
+template <typename TValue, typename TRep, typename TPeriod>
+tQuantity<tSIUnit<0, 0, 1, 0, 0, 0, 0>, TValue> operator - (std::chrono::duration<TRep, TPeriod> duration, tQuantity<tSIUnit<0, 0, 1, 0, 0, 0, 0>, TValue> time)
+{
+  return tQuantity<tSIUnit<0, 0, 1, 0, 0, 0, 0>, TValue>(duration) - time;
 }
 
 //----------------------------------------------------------------------
@@ -197,9 +230,20 @@ tQuantity<TUnit, decltype(TValue() * TScalar())> operator *(tQuantity<TUnit, TVa
   return tQuantity<TUnit, decltype(TValue() * TScalar())>(quantity.Value() * scalar);
 }
 template <typename TUnit, typename TValue, typename TScalar>
-tQuantity<TUnit, decltype(TScalar() * TValue())> operator *(TScalar scalar, tQuantity<TUnit, TValue> quantity)
+tQuantity<TUnit, decltype(TValue() * TScalar())> operator *(TScalar scalar, tQuantity<TUnit, TValue> quantity)
 {
   return quantity * scalar;
+}
+
+template <typename TUnit, typename TValue, typename TRep, typename TPeriod>
+tQuantity<typename operators::tProduct<TUnit, tSIUnit<0, 0, 1, 0, 0, 0, 0>>::tResult, TValue> operator *(tQuantity<TUnit, TValue> quantity, std::chrono::duration<TRep, TPeriod> duration)
+{
+  return quantity * tQuantity<tSIUnit<0, 0, 1, 0, 0, 0, 0>, TValue>(duration);
+}
+template <typename TUnit, typename TValue, typename TRep, typename TPeriod>
+tQuantity<typename operators::tProduct<TUnit, tSIUnit<0, 0, 1, 0, 0, 0, 0>>::tResult, TValue> operator *(std::chrono::duration<TRep, TPeriod> duration, tQuantity<TUnit, TValue> quantity)
+{
+  return quantity * duration;
 }
 
 //----------------------------------------------------------------------
@@ -220,6 +264,17 @@ template <typename TUnit, typename TValue>
 tQuantity < typename operators::tQuotient<tSIUnit<0, 0, 0, 0, 0, 0, 0>, TUnit>::tResult, decltype(double() / TValue()) > operator /(double scalar, tQuantity<TUnit, TValue> quantity)
 {
   return tQuantity<tSIUnit<0, 0, 0, 0, 0, 0, 0>>(scalar) / quantity;
+}
+
+template <typename TUnit, typename TValue, typename TRep, typename TPeriod>
+tQuantity<typename operators::tQuotient<TUnit, tSIUnit<0, 0, 1, 0, 0, 0, 0>>::tResult, TValue> operator /(tQuantity<TUnit, TValue> quantity, std::chrono::duration<TRep, TPeriod> duration)
+{
+  return quantity / tQuantity<tSIUnit<0, 0, 1, 0, 0, 0, 0>, TValue>(duration);
+}
+template <typename TUnit, typename TValue, typename TRep, typename TPeriod>
+tQuantity<typename operators::tQuotient<TUnit, tSIUnit<0, 0, 1, 0, 0, 0, 0>>::tResult, TValue> operator /(std::chrono::duration<TRep, TPeriod> duration, tQuantity<TUnit, TValue> quantity)
+{
+  return quantity / duration;
 }
 
 //----------------------------------------------------------------------
