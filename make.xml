@@ -10,6 +10,7 @@
       tQuantity.h
       tSIUnit.cpp
       tSymbol.h
+      tSymbolParser.cpp
       tUserDefinedSymbolsRegistry.h
       tUseSymbolStreamManipulator.h
     </sources>

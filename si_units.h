@@ -45,6 +45,7 @@
 #define __rrlib__si_units__include_guard__
 
 #include "rrlib/si_units/tSIUnit.h"
+#include "rrlib/si_units/tSymbolParser.h"
 #include "rrlib/si_units/tQuantity.h"
 #include "rrlib/si_units/tUseSymbolStreamManipulator.h"
 #include "rrlib/si_units/rtti.h"

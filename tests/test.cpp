@@ -78,6 +78,7 @@ class TestSIUnits : public util::tUnitTestSuite
   RRLIB_UNIT_TESTS_ADD_TEST(Symbols);
   RRLIB_UNIT_TESTS_ADD_TEST(Streaming);
   RRLIB_UNIT_TESTS_ADD_TEST(Conversions);
+  RRLIB_UNIT_TESTS_ADD_TEST(StringDeserialization);
   RRLIB_UNIT_TESTS_END_SUITE;
 
 private:
@@ -187,6 +188,46 @@ private:
     RRLIB_UNIT_TESTS_EQUALITY(tTime<>(8), time::tDuration(std::chrono::seconds(6)) + time);
     RRLIB_UNIT_TESTS_EQUALITY(tTime<>(1), time - time::tDuration(std::chrono::seconds(1)));
     RRLIB_UNIT_TESTS_EQUALITY(tTime<>(3), time::tDuration(std::chrono::seconds(5)) - time);
+  }
+
+  void StringDeserialization()
+  {
+    {
+      tLength<> length;
+      serialization::tStringInputStream stream(" 5 cm ");
+      stream >> length;
+      RRLIB_UNIT_TESTS_EQUALITY(length, tLength<>(0.05));
+    }
+    {
+      tFrequency<> frequency;
+      serialization::tStringInputStream stream("3MHz");
+      stream >> frequency;
+      RRLIB_UNIT_TESTS_EQUALITY(frequency, tFrequency<>(3000000));
+    }
+    {
+      tFrequency<> frequency;
+      serialization::tStringInputStream stream(" 10 1/s");
+      stream >> frequency;
+      RRLIB_UNIT_TESTS_EQUALITY(frequency, tFrequency<>(10));
+    }
+    {
+      tVelocity<> velocity;
+      serialization::tStringInputStream stream("3.6 km/h");
+      stream >> velocity;
+      RRLIB_UNIT_TESTS_EQUALITY(velocity, tVelocity<>(1));
+    }
+    {
+      tMass<> mass;
+      serialization::tStringInputStream stream("5 t");
+      stream >> mass;
+      RRLIB_UNIT_TESTS_EQUALITY(mass, tMass<>(5000));
+    }
+    {
+      tMass<> mass;
+      serialization::tStringInputStream stream("  5  ");
+      stream >> mass;
+      RRLIB_UNIT_TESTS_EQUALITY(mass, tMass<>(5));
+    }
   }
 };
 
