@@ -362,7 +362,11 @@ inline serialization::tStringOutputStream &operator << (serialization::tStringOu
 template <typename TUnit, typename TValue>
 inline serialization::tStringInputStream &operator >> (serialization::tStringInputStream &stream, tQuantity<TUnit, TValue> &quantity)
 {
-  RRLIB_LOG_THROW(std::runtime_error("De-Serializing from strings not (yet) supported"));
+  TValue value;
+  stream.GetWrappedStringStream() >> value;
+  std::string symbol_string = stream.ReadWhile("1/", serialization::tStringInputStream::cWHITESPACE | serialization::tStringInputStream::cLETTER, true);
+  double factor = symbol_string.length() ? tSymbolParser<TUnit>::GetFactorToBaseUnit(symbol_string) : 1;
+  quantity = tQuantity<TUnit, TValue>(static_cast<TValue>(factor * value));
   return stream;
 }
 
