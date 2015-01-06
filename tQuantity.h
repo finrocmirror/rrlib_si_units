@@ -365,7 +365,7 @@ inline serialization::tStringInputStream &operator >> (serialization::tStringInp
 {
   TValue value;
   stream.GetWrappedStringStream() >> value;
-  std::string symbol_string = stream.ReadWhile("1/", serialization::tStringInputStream::cWHITESPACE | serialization::tStringInputStream::cLETTER, true);
+  std::string symbol_string = stream.ReadWhile("/^", serialization::tStringInputStream::cWHITESPACE | serialization::tStringInputStream::cLETTER | serialization::tStringInputStream::cDIGIT, true);
   double factor = symbol_string.length() ? tSymbolParser<TUnit>::GetFactorToBaseUnit(symbol_string) : 1;
   quantity = tQuantity<TUnit, TValue>(static_cast<TValue>(factor * value));
   return stream;

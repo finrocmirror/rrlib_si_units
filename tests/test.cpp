@@ -228,6 +228,12 @@ private:
       stream >> mass;
       RRLIB_UNIT_TESTS_EQUALITY(mass, tMass<>(5));
     }
+    {
+      tAcceleration<> acceleration;
+      serialization::tStringInputStream stream("3 m/s^2");
+      stream >> acceleration;
+      RRLIB_UNIT_TESTS_EQUALITY(acceleration, tAcceleration<>(3));
+    }
   }
 };
 
