@@ -41,6 +41,7 @@
 //----------------------------------------------------------------------
 #include <sstream>
 
+#include "rrlib/math/tAngle.h"
 #include "rrlib/rtti/rtti.h"
 
 //----------------------------------------------------------------------
@@ -67,12 +68,27 @@ template <typename TUnit, typename TValue>
 struct TypeName<si_units::tQuantity<TUnit, TValue>>
 {
   /*!
-   * \return Type name to use in rrlib_rttti for type T
+   * \return Type name to use in rrlib_rtti for type T
    */
   static std::string Get()
   {
     std::stringstream str;
     str << "Quantity<" << TUnit() << ", " << TypeName<TValue>::Get() << ">";
+    return str.str();
+  }
+};
+
+// specialization for default angle class
+template <typename TUnit>
+struct TypeName<si_units::tQuantity<TUnit, math::tAngle<double, math::angle::Radian, math::angle::NoWrap>>>
+{
+  /*!
+   * \return Type name to use in rrlib_rtti for type T
+   */
+  static std::string Get()
+  {
+    std::stringstream str;
+    str << "Quantity<" << TUnit() << ", Angle>";
     return str.str();
   }
 };
