@@ -96,6 +96,7 @@ class tQuantity<tSIUnit<Tlength, Tmass, Ttime, Telectric_current, Ttemperature, 
 public:
 
   typedef tSIUnit<Tlength, Tmass, Ttime, Telectric_current, Ttemperature, Tamount_of_substance, Tluminous_intensity> tUnit;
+  typedef TValue tValue;
 
   tQuantity()
   {
