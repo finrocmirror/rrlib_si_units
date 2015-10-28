@@ -101,6 +101,7 @@ template <typename T = double> using tVelocity = tQuantity < tSIUnit < 1, 0, -1,
 template <typename T = double> using tAcceleration = tQuantity < tSIUnit < 1, 0, -2, 0, 0, 0, 0 > , T >;
 
 template <typename T = double, typename TAngleUnit = math::angle::Radian> using tAngularVelocity = tQuantity<tHertz, math::tAngle<T, TAngleUnit, math::angle::NoWrap>>;
+template <typename T = double, typename TAngleUnit = math::angle::Radian> using tAngularAcceleration = tQuantity < tSIUnit < 0, 0, -2, 0, 0, 0, 0 > , math::tAngle<T, TAngleUnit, math::angle::NoWrap >>;
 
 //----------------------------------------------------------------------
 // Const values
