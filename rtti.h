@@ -70,12 +70,14 @@ struct TypeName<si_units::tQuantity<TUnit, TValue>>
   /*!
    * \return Type name to use in rrlib_rtti for type T
    */
-  static std::string Get()
+  static util::tManagedConstCharPointer Get(const rrlib::rtti::tType& type)
   {
     std::stringstream str;
-    str << "Quantity<" << TUnit() << ", " << TypeName<TValue>::Get() << ">";
-    return str.str();
+    str << "Quantity<" << TUnit() << ", " << rtti::tDataType<TValue>().GetName() << ">";
+    return util::tManagedConstCharPointer(str.str().c_str(), true);
   }
+
+  static constexpr tGetTypenameFunction value = &Get;
 };
 
 // specialization for default angle class
@@ -85,12 +87,23 @@ struct TypeName<si_units::tQuantity<TUnit, math::tAngle<double, math::angle::Rad
   /*!
    * \return Type name to use in rrlib_rtti for type T
    */
-  static std::string Get()
+  static util::tManagedConstCharPointer Get(const rrlib::rtti::tType& type)
   {
     std::stringstream str;
     str << "Quantity<" << TUnit() << ", Angle>";
-    return str.str();
+    return util::tManagedConstCharPointer(str.str().c_str(), true);
   }
+
+  static constexpr tGetTypenameFunction value = &Get;
+};
+
+template <typename TUnit, typename TValue>
+struct UnderlyingType<si_units::tQuantity<TUnit, TValue>>
+{
+  typedef TValue type;
+  enum { cREVERSE_CAST_VALID = true };
+  enum { cBINARY_SERIALIZATION_DIFFERS = false };
+  enum { cOTHER_SERIALIZATION_DIFFERS = true };
 };
 
 //----------------------------------------------------------------------

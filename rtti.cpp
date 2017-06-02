@@ -66,7 +66,7 @@ namespace si_units
 // Implementation
 //----------------------------------------------------------------------
 
-static rtti::tType init_types[] =
+rtti::tType init_types[] =
 {
   rtti::tDataType<tLength<double>>(),
   rtti::tDataType<tLength<float>>(),

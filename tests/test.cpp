@@ -159,12 +159,12 @@ private:
 
     serialization::tMemoryBuffer memory_buffer;
     serialization::tOutputStream output_stream(memory_buffer);
-    serialization::tInputStream input_stream(memory_buffer);
 
     output_stream << tLength<double>(10);
     output_stream << tForce<float>(20);
     output_stream.Flush();
 
+    serialization::tInputStream input_stream(memory_buffer);
     input_stream >> length;
     RRLIB_UNIT_TESTS_EQUALITY(tLength<double>(10), length);
     input_stream >> force;
