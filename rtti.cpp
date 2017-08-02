@@ -32,6 +32,8 @@
 // External includes (system with <>, local with "")
 //----------------------------------------------------------------------
 #include "rrlib/si_units/si_units.h"
+#include "rrlib/rtti_conversion/tStaticCastOperation.h"
+#include "rrlib/rtti/tStaticTypeRegistration.h"
 
 //----------------------------------------------------------------------
 // Internal includes with ""
@@ -66,40 +68,25 @@ namespace si_units
 // Implementation
 //----------------------------------------------------------------------
 
-rtti::tType init_types[] =
-{
-  rtti::tDataType<tLength<double>>(),
-  rtti::tDataType<tLength<float>>(),
-  rtti::tDataType<tMass<double>>(),
-  rtti::tDataType<tMass<float>>(),
-  rtti::tDataType<tTime<double>>(),
-  rtti::tDataType<tTime<float>>(),
-  rtti::tDataType<tElectricCurrent<double>>(),
-  rtti::tDataType<tElectricCurrent<float>>(),
-  rtti::tDataType<tTemperature<double>>(),
-  rtti::tDataType<tTemperature<float>>(),
-  rtti::tDataType<tAmountOfSubstance<double>>(),
-  rtti::tDataType<tAmountOfSubstance<float>>(),
-  rtti::tDataType<tLuminousIntensity<double>>(),
-  rtti::tDataType<tLuminousIntensity<float>>(),
+rtti::tStaticTypeRegistration init_type = rtti::tStaticTypeRegistration("rrlib_si_units").
+    Add<tLength<>>("rrlib.si_units.Length", "Quantity<m, double>").
+    Add<tMass<>>("rrlib.si_units.Mass", "Quantity<kg, double>").
+    Add<tTime<>>("rrlib.si_units.Time", "Quantity<s, double>").
+    Add<tElectricCurrent<>>("rrlib.si_units.ElectricCurrent", "Quantity<A, double>").
+    Add<tTemperature<>>("rrlib.si_units.Temperature", "Quantity<K, double>").
+    Add<tAmountOfSubstance<>>("rrlib.si_units.AmountOfSubstance").
+    Add<tLuminousIntensity<>>("rrlib.si_units.LuminousIntensity").
 
-  rtti::tDataType<tFrequency<double>>(),
-  rtti::tDataType<tFrequency<float>>(),
-  rtti::tDataType<tForce<double>>(),
-  rtti::tDataType<tForce<float>>(),
-  rtti::tDataType<tPressure<double>>(),
-  rtti::tDataType<tPressure<float>>(),
+    Add<tFrequency<>>("rrlib.si_units.Frequency", "Quantity<Hz, double>").
+    Add<tForce<>>("rrlib.si_units.Force", "Quantity<N, double>").
+    Add<tPressure<>>("rrlib.si_units.Pressure", "Quantity<Pa, double>").
 
-  rtti::tDataType<tVelocity<double>>(),
-  rtti::tDataType<tVelocity<float>>(),
-  rtti::tDataType<tAcceleration<double>>(),
-  rtti::tDataType<tAcceleration<float>>(),
+    Add<tVelocity<>>("rrlib.si_units.Velocity", "Quantity<m/s, double>").
+    Add<tAcceleration<>>("rrlib.si_units.Acceleration", "Quantity<m/s^2, double>").
+    Add<tAngularVelocity<>>("rrlib.si_units.AngularVelocity", "Quantity<1/s, Angle>").
+    Add<tAngularAcceleration<>>("rrlib.si_units.AngularAcceleration", "Quantity<1/s^2, Angle>");
 
-  rtti::tDataType<tAngularVelocity<double, math::angle::Radian>>(),
-  rtti::tDataType<tAngularVelocity<float, math::angle::Radian>>(),
-  rtti::tDataType<tAngularVelocity<double, math::angle::Degree>>(),
-  rtti::tDataType<tAngularVelocity<float, math::angle::Degree>>(),
-};
+auto& cTYPE_CASTS = rrlib::rtti::conversion::tStaticCastOperation::Register<rrlib::time::tDuration, rrlib::si_units::tTime<>, true>();
 
 //----------------------------------------------------------------------
 // End of namespace declaration

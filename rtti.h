@@ -73,7 +73,7 @@ struct TypeName<si_units::tQuantity<TUnit, TValue>>
   static util::tManagedConstCharPointer Get(const rrlib::rtti::tType& type)
   {
     std::stringstream str;
-    str << "Quantity<" << TUnit() << ", " << rtti::tDataType<TValue>().GetName() << ">";
+    str << "rrlib.si_units.Quantity<" << TUnit() << ", " << rtti::tDataType<TValue>().GetName() << ">";
     return util::tManagedConstCharPointer(str.str().c_str(), true);
   }
 
@@ -90,7 +90,7 @@ struct TypeName<si_units::tQuantity<TUnit, math::tAngle<double, math::angle::Rad
   static util::tManagedConstCharPointer Get(const rrlib::rtti::tType& type)
   {
     std::stringstream str;
-    str << "Quantity<" << TUnit() << ", Angle>";
+    str << "rrlib.si_units.Quantity<" << TUnit() << ", Angle>";
     return util::tManagedConstCharPointer(str.str().c_str(), true);
   }
 
