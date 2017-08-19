@@ -77,7 +77,7 @@ rtti::tStaticTypeRegistration init_type = rtti::tStaticTypeRegistration("rrlib_s
     Add<tAmountOfSubstance<>>("rrlib.si_units.AmountOfSubstance").
     Add<tLuminousIntensity<>>("rrlib.si_units.LuminousIntensity").
 
-    Add<tFrequency<>>("rrlib.si_units.Frequency", "Quantity<Hz, double>").
+    Add<tFrequency<>>("rrlib.si_units.Frequency", "Quantity<1/s, double>").
     Add<tForce<>>("rrlib.si_units.Force", "Quantity<N, double>").
     Add<tPressure<>>("rrlib.si_units.Pressure", "Quantity<Pa, double>").
 
